@@ -24,14 +24,14 @@ ENV AWS_QUERYSTRING_EXPIRE = 63115200
 
 
 
-ENV EMAIL_HOST=smtp.sendgrid.net
-ENV EMAIL_HOST_USER=apikey
-ENV EMAIL_PORT=587
-ENV EMAIL_USE_TLS=True
-ENV EMAIL_HOST_PASSWORD=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
+# ENV EMAIL_HOST=smtp.sendgrid.net
+# ENV EMAIL_HOST_USER=apikey
+# ENV EMAIL_PORT=587
+# ENV EMAIL_USE_TLS=True
+# ENV EMAIL_HOST_PASSWORD=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
 
 
-ENV SECRET_KEY=django-insecure-lvdat6w^@07ut!3xv(@ec@$n9mhl6hpiij*3@sy&b(vd38g4u5
+ENV SECRET_KEY=django-insecure-rl8t1x(=2g^l(zbp6*qpi=3rv%$-9tru+c=3#a=jmvj5)+j-85
 ENV DB_ENGINE=django.db.backends.postgresql
 ENV DB_NAME=railway
 ENV DB_HOST=monorail.proxy.rlwy.net
