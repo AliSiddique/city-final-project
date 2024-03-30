@@ -28,10 +28,6 @@ const schema = yup
             .notOneOf(
                 ["password", "12345", "Password123", "Password"],
                 'Password cannot contain the word "password"'
-            )
-            .matches(
-                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/,
-                "Password must be strong. It should contain at least one uppercase letter, one lowercase letter, one number, and one special character, and be between 8 and 20 characters long."
             ),
         password2: yup
             .string()
@@ -272,7 +268,7 @@ export default function SignupForm() {
                     </div>
                 </div>
                 <div className="relative hidden w-0 flex-1 lg:block">
-                    <Image
+                    <img
                         width={700}
                         height={700}
                         className="absolute inset-0 h-full w-full object-cover"
