@@ -6,16 +6,23 @@ from django.http import JsonResponse
 import requests
 import numpy as np
 from rest_framework.decorators import api_view
-from .models import LabelledImage, Image
+from .models import LabelledImage, Image, LabelledImagesAnalytics
 from django.core.files.base import ContentFile
 from PIL import Image as PILImage
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from rest_framework.views import APIView
 from io import BytesIO
-from .serializers import PhotoSerializer,   LabelledImageSerializer
+from .serializers import PhotoSerializer,   LabelledImageSerializer, AnalyticsSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
+from django.utils import timezone
+from datetime import timedelta
+from django.db.models import Count
+from django.db.models.functions import TruncDate
+from datetime import datetime
+from django.db.models import Sum
+
 
 
 
@@ -94,6 +101,59 @@ def get_single_photo(request, pk):
     return Response({"photo": serializer.data, "labelled_image":labeled_photo })
 
     # return Response(serializer.data)
+@api_view(['GET'])
+def get_analytics(request):
+    user = User.objects.get(username=request.user)
+    # Calculate the date 7 days ago from today
+    seven_days_ago = timezone.now() - timedelta(days=7)
+    
+    # Get analytics data for the last 7 days
+    analytics = LabelledImagesAnalytics.objects.filter(
+        user=user,
+        created_at__gte=seven_days_ago
+    ).annotate(
+        date=TruncDate('created_at')
+    ).values('date').annotate(
+        total_amount=Count('*')
+    ).order_by('-date')
+    
+    today = timezone.now().date()
+    yesterday = today - timedelta(days=1)
+    day_before_yesterday = yesterday - timedelta(days=1)
+    today = LabelledImagesAnalytics.objects.filter(
+        user=user,
+        created_at__lte=today
+    ).count()
+    print(today)
+   
+    yesterday = LabelledImagesAnalytics.objects.filter(
+        user=user,
+        created_at__lte=yesterday
+    ).count()
+
+    difference_from_yesterday =  today - yesterday
+    print(f"differece {difference_from_yesterday}")
+    # Calculate the difference between yesterday and the day before yesterday
+    # Create a list of dates for the last 7 days
+    date_list = [(seven_days_ago + timedelta(days=x)).date() for x in range(7)]
+
+    # Convert the dates to string in the same format as in the analytics data
+    date_strings = [date.strftime("%Y-%m-%d") for date in date_list]
+
+    # Create a dictionary to store the analytics data for each date
+    # Create a dictionary to store the analytics data for each date
+    analytics_dict = {entry['date']: entry['total_amount'] for entry in analytics}
+
+    # Populate missing dates with 0 total_amount
+    for date_string in date_strings:
+        if date_string not in analytics_dict:
+            analytics_dict[date_string] = 0
+
+    # Create a list of dictionaries containing date and total_amount
+    analytics_data = [{'date': date, 'total_amount': total_amount} for date, total_amount in analytics_dict.items()]
+
+
+    return Response({"analytics": analytics_data})
 
 
 @api_view(['GET'])

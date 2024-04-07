@@ -23,3 +23,11 @@ class LabelledImage(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
 
+
+class LabelledImagesAnalytics(models.Model):
+    amount = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey("auth.User", on_delete=models.CASCADE, null=True, blank=True)
+
+    def formatted_created_at(self):
+        return self.created_at.strftime("%Y-%m-%d")
