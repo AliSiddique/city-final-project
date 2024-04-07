@@ -81,9 +81,15 @@ def get_users_photos(request):
     user = User.objects.get(username=request.user)
     photos = Image.objects.filter(user=user)
     serializer = PhotoSerializer(photos, many=True)
+
     return Response(serializer.data)
 
+@api_view(['GET'])
+def get_single_photo(request, pk):
+    photo = Image.objects.get(pk=pk)
+    serializer = PhotoSerializer(photo)
 
+    return Response(serializer.data)
 
 @api_view(['POST'])
 def label_image(request):

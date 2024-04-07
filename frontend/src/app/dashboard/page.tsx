@@ -10,6 +10,7 @@ import { File, ListFilter, PlusCircle } from 'lucide-react'
 import { MoreHorizontal } from 'lucide-react'
 import { cookies } from 'next/headers'
 import axios from 'axios'
+import Link from 'next/link'
 
 
 type Props = {}
@@ -26,6 +27,34 @@ const getUsersPhotos = async () => {
 export default async function page({}: Props) {
   const files = await getUsersPhotos()
   console.log(files)
+  const date = new Date(files[0].created_at);
+
+  const options:any = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    timeZone: 'UTC' // Or your desired timezone
+  };
+  
+  // const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+  function formattedDate(dates:any) {
+    const datess = new Date(dates);
+    const options:any = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      timeZone: 'UTC' // Or your desired timezone
+    };
+    
+    return new Intl.DateTimeFormat('en-US', options).format(datess);
+  }
+  
   return (
     <div>
             <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -108,6 +137,7 @@ export default async function page({}: Props) {
                       {files.map((file:any) => (
                       <TableRow>
                         <TableCell className="hidden sm:table-cell">
+                          <Link href={`/dashboard/images/${file.id}`}>
                           <img
                             alt="Product image"
                             className="aspect-square rounded-md object-cover"
@@ -115,19 +145,20 @@ export default async function page({}: Props) {
                             src={file.image}
                             width="64"
                           />
+                          </Link>
                         </TableCell>
                         <TableCell className="font-medium">
-                          Laser Lemonade Machine
+                          {file.name}
                         </TableCell>
                         <TableCell>
-                          <Badge variant="outline">Draft</Badge>
+                          <Badge variant="outline">Not laballed</Badge>
                         </TableCell>
                         <TableCell>$499.99</TableCell>
                         <TableCell className="hidden md:table-cell">
                           25
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
-                          2023-07-12 10:42 AM
+                          {formattedDate(file.uploaded_at)}
                         </TableCell>
                         <TableCell>
                           <DropdownMenu>
