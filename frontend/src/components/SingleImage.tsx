@@ -8,7 +8,14 @@ import {
   ShoppingBagIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
+import { File, ListFilter, PlusCircle } from 'lucide-react'
+
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { CheckIcon, QuestionMarkCircleIcon, StarIcon } from '@heroicons/react/20/solid'
+import { BASEURL } from '@/API/APIRoute'
+import axios from 'axios'
+import { Button } from './ui/button'
+import Link from 'next/link'
 
 const navigation = {
   categories: [
@@ -239,6 +246,19 @@ interface Props {
 export default function SingleImage({file}: Props) {
   const [open, setOpen] = useState(false)
   const [selectedSize, setSelectedSize] = useState(product.sizes[0])
+  const [labelled_image, setLabelled_image] = useState(null)
+  const handleLabel = async (e:any) => {
+    e.preventDefault()
+    const res = await axios.post(`${BASEURL}/api/label`, {
+        id: file.photo.id,
+        image: file.photo.image
+        })
+    const data = res.data
+    console.log("data " + data.results)
+    setLabelled_image(data.results)
+
+    }
+
 
   return (
     <div className="bg-gray-50">
@@ -256,7 +276,7 @@ export default function SingleImage({file}: Props) {
           
 
               <div className="mt-4">
-                <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{file.name}</h1>
+                <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{file.photo.name}</h1>
               </div>
 
               <section aria-labelledby="information-heading" className="mt-4">
@@ -305,7 +325,7 @@ export default function SingleImage({file}: Props) {
             <div className="mt-10 lg:col-start-2 lg:row-span-2 lg:mt-0 lg:self-center">
               <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg">
                 <img
-                  src={file.image}
+                  src={file.photo.image}
                   alt={product.imageAlt}
                   className="h-96 w-full object-contain object-center"
                 />
@@ -372,6 +392,7 @@ export default function SingleImage({file}: Props) {
                   <div className="mt-10">
                     <button
                       type="submit"
+                        onClick={handleLabel}
                       className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
                     >
                       Label
@@ -394,7 +415,9 @@ export default function SingleImage({file}: Props) {
 
         <div className="mx-auto max-w-2xl px-4 py-24 sm:px-6 sm:py-32 lg:max-w-7xl lg:px-8">
           {/* Details section */}
+        
           <section aria-labelledby="details-heading">
+            
             <div className="flex flex-col items-center text-center">
               <h2 id="details-heading" className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                 The Fine Details
@@ -407,9 +430,9 @@ export default function SingleImage({file}: Props) {
 
             <div className="mt-16 grid grid-cols-1 gap-y-16 lg:grid-cols-2 lg:gap-x-8">
               <div>
-                <div className="aspect-h-2 aspect-w-3 w-full overflow-hidden rounded-lg">
+                <div className="aspect-h-2 aspect-w-3 w-full overflow-hidden rounded-lg h-80">
                   <img
-                    src="https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg"
+                    src={file.labelled_image ?? file.image}
                     alt="Drawstring top with elastic loop closure and textured interior padding."
                     className="h-full w-full object-cover object-center"
                   />
@@ -418,6 +441,43 @@ export default function SingleImage({file}: Props) {
                   The 20L model has enough space for 370 candy bars, 6 cylinders of chips, 1,220 standard gumballs, or
                   any combination of on-the-go treats that your heart desires. Yes, we did the math.
                 </p>
+                <div className="ml-auto flex items-center gap-2">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="h-7 gap-1">
+                      <ListFilter className="h-3.5 w-3.5" />
+                      <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                        Filter
+                      </span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Filter by</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuCheckboxItem checked>
+                      Active
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem>Draft</DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem>
+                      Archived
+                    </DropdownMenuCheckboxItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <Button size="sm" variant="outline" className="h-7 gap-1">
+                    <Link target='_blank' href={file.labelled_image ?? file.photo.image}>
+                  <File className="h-3.5 w-3.5" />
+                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                    Export
+                  </span>
+                    </Link>
+                </Button>
+                <Button size="sm" className="h-7 gap-1">
+                  <PlusCircle className="h-3.5 w-3.5" />
+                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                    Add Product
+                  </span>
+                </Button>
+              </div>
               </div>
               <div>
                 <div className="aspect-h-2 aspect-w-3 w-full overflow-hidden rounded-lg">

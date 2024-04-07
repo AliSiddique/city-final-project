@@ -1,4 +1,5 @@
 
+import { BASEURL } from '@/API/APIRoute'
 import SingleImage from '@/components/SingleImage'
 import axios from 'axios'
 import { cookies } from 'next/headers'
@@ -12,7 +13,7 @@ type Props = {
 }
 const getSinglePhoto = async (id:string) => {
     const token = cookies().get('token')
-   const res = await axios.get(`http://127.0.0.1:8000/api/get-photo/${id}`, {
+   const res = await axios.get(`${BASEURL}/api/get-photo/${id}`, {
             headers: {
               Authorization: `Token ${token?.value}`,
             },

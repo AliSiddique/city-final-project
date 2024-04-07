@@ -1,6 +1,7 @@
 "use client"
 import Image from "next/image"
 import Link from "next/link"
+import React, { useEffect, useState } from "react"
 import {
   File,
   Home,
@@ -60,10 +61,28 @@ import {
   TooltipProvider,
 
 } from "@/components/ui/tooltip"
+import { useRouter } from "next/navigation"
 interface Props {
   children : React.ReactNode
 }
 export default function Dashboard({children}:Props) {
+  const [search, setSearch] = useState("")
+  React.useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "Enter" ) {
+        e.preventDefault()
+        router.push(`/dashboard/search?query=${search}`)
+
+      }
+    }
+ 
+    document.addEventListener("keydown", down)
+    return () => document.removeEventListener("keydown", down)
+  }, [search])
+  const router = useRouter()
+  const handleClicked = () => {
+    router.push(`/dashboard/search?query=${search}`)
+  }
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
               <TooltipProvider>
@@ -214,6 +233,8 @@ export default function Dashboard({children}:Props) {
             <Input
               type="search"
               placeholder="Search..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
             />
           </div>

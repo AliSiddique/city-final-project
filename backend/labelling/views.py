@@ -12,7 +12,7 @@ from PIL import Image as PILImage
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from rest_framework.views import APIView
 from io import BytesIO
-from .serializers import PhotoSerializer
+from .serializers import PhotoSerializer,   LabelledImageSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
@@ -88,12 +88,26 @@ def get_users_photos(request):
 def get_single_photo(request, pk):
     photo = Image.objects.get(pk=pk)
     serializer = PhotoSerializer(photo)
+    labelled_images = LabelledImage.objects.filter(image=photo)
+    labeled_photo = labelled_images.first().labelled_image.url
+    # labbelled_images_serializer = LabelledImageSerializer(labelled_images, many=True)
+    return Response({"photo": serializer.data, "labelled_image":labeled_photo })
+
+    # return Response(serializer.data)
+
+
+@api_view(['GET'])
+def search_photos(request):
+    query = request.query_params.get('query')
+    photos = Image.objects.filter(name__icontains=query)
+    serializer = PhotoSerializer(photos, many=True)
 
     return Response(serializer.data)
 
 @api_view(['POST'])
 def label_image(request):
     # Load YOLOv8 model
+    id = request.data['id']
     images = request.data['image']
     print(images)
     model = YOLO("../yolov8m.pt")
@@ -116,11 +130,12 @@ def label_image(request):
         print(im)
     image_io = BytesIO()
     im.save(image_io, format='JPEG')
+    image_num = Image.objects.get(pk=id)
     
     # Create InMemoryUploadedFile from BytesIO
     image_file = InMemoryUploadedFile(image_io, None, 'image.jpg', 'image/jpeg', image_io.tell(), None)
     
-    ii = LabelledImage(image=Image.objects.first(),labelled_image=image_file, label="test", confidence=0.5, x=0.5, y=0.5, w=0.5, h=0.5)
+    ii = LabelledImage(image=image_num,labelled_image=image_file, label="test", confidence=0.5, x=0.5, y=0.5, w=0.5, h=0.5)
     # ii.labelled_image.save("ad.png", ContentFile(im_array.tobytes()))
 
 

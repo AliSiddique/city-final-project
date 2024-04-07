@@ -27,17 +27,8 @@ const getUsersPhotos = async () => {
 export default async function page({}: Props) {
   const files = await getUsersPhotos()
   console.log(files)
-  const date = new Date(files[0].created_at);
 
-  const options:any = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    timeZone: 'UTC' // Or your desired timezone
-  };
+  
   
   // const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
   function formattedDate(dates:any) {
@@ -97,10 +88,12 @@ export default async function page({}: Props) {
                   </span>
                 </Button>
                 <Button size="sm" className="h-7 gap-1">
+                  <Link  href="/dashboard/upload">
                   <PlusCircle className="h-3.5 w-3.5" />
                   <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                     Add Product
                   </span>
+                  </Link>
                 </Button>
               </div>
             </div>
