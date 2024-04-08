@@ -146,7 +146,12 @@ export default function DashboardTable({files}: Props) {
                   {file.name}
                 </TableCell>
                 <TableCell>
-                  <Badge variant="outline">Not laballed</Badge>
+                  {file.isLabelled ? (
+                    <Badge variant="secondary" className='bg-green-500 text-white'>Labelled</Badge>
+                  ) : (
+                    <Badge variant="destructive">Draft</Badge>
+                  
+                  )}
                 </TableCell>
                 <TableCell>$499.99</TableCell>
                 <TableCell className="hidden md:table-cell">

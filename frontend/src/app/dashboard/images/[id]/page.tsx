@@ -23,11 +23,12 @@ const getSinglePhoto = async (id:string) => {
   }
 export default async function page({params}: Props) {
     const image = await getSinglePhoto(params.id)
-    console.log(image)
+    const token = cookies().get('token')
+
     
   return (
     <div>
-        <SingleImage file={image} />
+        <SingleImage token={token?.value ?? ""} file={image} />
     </div>
   )
 }

@@ -6,7 +6,7 @@ from django.http import JsonResponse
 import requests
 import numpy as np
 from rest_framework.decorators import api_view
-from .models import LabelledImage, Image, LabelledImagesAnalytics
+from .models import LabelledImage, Image, LabelledImagesAnalytics, ImageComments
 from django.core.files.base import ContentFile
 from PIL import Image as PILImage
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -89,6 +89,7 @@ def get_users_photos(request):
     photos = Image.objects.filter(user=user)
     serializer = PhotoSerializer(photos, many=True)
 
+
     return Response(serializer.data)
 
 @api_view(['GET'])
@@ -96,9 +97,10 @@ def get_single_photo(request, pk):
     photo = Image.objects.get(pk=pk)
     serializer = PhotoSerializer(photo)
     labelled_images = LabelledImage.objects.filter(image=photo)
-    labeled_photo = labelled_images.first().labelled_image.url
-    # labbelled_images_serializer = LabelledImageSerializer(labelled_images, many=True)
-    return Response({"photo": serializer.data, "labelled_image":labeled_photo })
+    labeled_photo = labelled_images.first().labelled_image.url if labelled_images else None
+    comments = ImageComments.objects.filter(image=photo)
+
+    return Response({"photo": serializer.data, "labelled_image":labeled_photo, "comments": comments.values()})
 
     # return Response(serializer.data)
 @api_view(['GET'])
@@ -194,6 +196,8 @@ def label_image(request):
     
     # Create InMemoryUploadedFile from BytesIO
     image_file = InMemoryUploadedFile(image_io, None, 'image.jpg', 'image/jpeg', image_io.tell(), None)
+    ijs =LabelledImagesAnalytics.objects.create(amount=1, user=User.objects.get(username=request.user))
+    ijs.save()
     
     ii = LabelledImage(image=image_num,labelled_image=image_file, label="test", confidence=0.5, x=0.5, y=0.5, w=0.5, h=0.5)
     # ii.labelled_image.save("ad.png", ContentFile(im_array.tobytes()))
@@ -201,6 +205,21 @@ def label_image(request):
 
 
     ii.save()
+    image_num.isLabelled = True
+    image_num.save()
     labelled_image = ii.labelled_image.url
 
     return JsonResponse({"results": labelled_image})
+
+
+
+@api_view(['POST'])
+def add_comment(request):
+    image_id = request.data['id']
+    comment = request.data['comment']
+    image = Image.objects.get(pk=image_id)
+    user = User.objects.get(username=request.user)
+    ic = ImageComments(image=image, comment=comment, user=user)
+    ic.save()
+
+    return JsonResponse({"results": "Comment added"})

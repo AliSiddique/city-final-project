@@ -1,5 +1,5 @@
 "use client"
-import { Fragment, useState } from 'react'
+import { FormEvent, Fragment, useEffect, useState } from 'react'
 import { Dialog, Popover, RadioGroup, Tab, Transition } from '@headlessui/react'
 import {
   Bars3Icon,
@@ -8,7 +8,7 @@ import {
   ShoppingBagIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
-import { File, ListFilter, PlusCircle } from 'lucide-react'
+import { CircleUser, File, ListFilter, PlusCircle } from 'lucide-react'
 
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { CheckIcon, QuestionMarkCircleIcon, StarIcon } from '@heroicons/react/20/solid'
@@ -241,11 +241,39 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 interface Props {
+  token: string
     file: any
 }
-export default function SingleImage({file}: Props) {
+export default function SingleImage({token,file}: Props) {
   const [open, setOpen] = useState(false)
   const [selectedSize, setSelectedSize] = useState(product.sizes[0])
+  const [comments, setComments] = useState(file.comments ?? [])
+  const [newComment, setNewComment] = useState("")
+  const addComment = async (e:FormEvent,id:string,comment:any) => {
+    e.preventDefault()
+    try {
+      const res = await axios.post(
+        `${BASEURL}/api/add-comment`,
+        {
+          id: id,
+          comment: newComment
+        },
+        {
+          headers: {
+            Authorization: `Token ${token}`
+          }
+        }
+      ); 
+      const data = res.data
+      console.log(data)
+      setComments([...comments, newComment])
+
+    } catch (error) {
+      console.error(error);
+    }
+  
+
+  }
   const [labelled_image, setLabelled_image] = useState(null)
   const handleLabel = async (e:any) => {
     e.preventDefault()
@@ -255,10 +283,25 @@ export default function SingleImage({file}: Props) {
         })
     const data = res.data
     console.log("data " + data.results)
-    setLabelled_image(data.results)
+    setComments([...comments, {id:Math.random(), name: "User", comment: newComment, created_at: new Date()}])
 
     }
-
+    function formattedDate(dates:any) {
+      const datess = new Date(dates ?? "2024-06-07");
+      const options:any = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZone: 'UTC' // Or your desired timezone
+      };
+      
+      return new Intl.DateTimeFormat('en-US', options).format(datess);
+    }
+    useEffect(() => {
+    }, [comments])
 
   return (
     <div className="bg-gray-50">
@@ -512,217 +555,96 @@ export default function SingleImage({file}: Props) {
           </section>
         </div>
 
-        <section aria-labelledby="reviews-heading" className="bg-white">
-          <div className="mx-auto max-w-2xl px-4 py-24 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-12 lg:gap-x-8 lg:px-8 lg:py-32">
-            <div className="lg:col-span-4">
-              <h2 id="reviews-heading" className="text-2xl font-bold tracking-tight text-gray-900">
-                Customer Reviews
-              </h2>
-
-              <div className="mt-3 flex items-center">
-                <div>
-                  <div className="flex items-center">
-                    {[0, 1, 2, 3, 4].map((rating) => (
-                      <StarIcon
-                        key={rating}
-                        className={classNames(
-                          reviews.average > rating ? 'text-yellow-400' : 'text-gray-300',
-                          'h-5 w-5 flex-shrink-0'
-                        )}
-                        aria-hidden="true"
-                      />
-                    ))}
-                  </div>
-                  <p className="sr-only">{reviews.average} out of 5 stars</p>
-                </div>
-                <p className="ml-2 text-sm text-gray-900">Based on {reviews.totalCount} reviews</p>
-              </div>
-
-              <div className="mt-6">
-                <h3 className="sr-only">Review data</h3>
-
-                <dl className="space-y-3">
-                  {reviews.counts.map((count) => (
-                    <div key={count.rating} className="flex items-center text-sm">
-                      <dt className="flex flex-1 items-center">
-                        <p className="w-3 font-medium text-gray-900">
-                          {count.rating}
-                          <span className="sr-only"> star reviews</span>
-                        </p>
-                        <div aria-hidden="true" className="ml-1 flex flex-1 items-center">
-                          <StarIcon
-                            className={classNames(
-                              count.count > 0 ? 'text-yellow-400' : 'text-gray-300',
-                              'h-5 w-5 flex-shrink-0'
-                            )}
-                            aria-hidden="true"
-                          />
-
-                          <div className="relative ml-3 flex-1">
-                            <div className="h-3 rounded-full border border-gray-200 bg-gray-100" />
-                            {count.count > 0 ? (
-                              <div
-                                className="absolute inset-y-0 rounded-full border border-yellow-400 bg-yellow-400"
-                                style={{ width: `calc(${count.count} / ${reviews.totalCount} * 100%)` }}
-                              />
-                            ) : null}
-                          </div>
-                        </div>
-                      </dt>
-                      <dd className="ml-3 w-10 text-right text-sm tabular-nums text-gray-900">
-                        {Math.round((count.count / reviews.totalCount) * 100)}%
-                      </dd>
+        <section aria-labelledby="notes-title">
+                <div className="bg-white shadow sm:overflow-hidden sm:rounded-lg">
+                  <div className="divide-y divide-gray-200">
+                    <div className="px-4 py-5 sm:px-6">
+                      <h2 id="notes-title" className="text-lg font-medium text-gray-900">
+                        Notes
+                      </h2>
                     </div>
-                  ))}
-                </dl>
-              </div>
+                    <div className="px-4 py-6 sm:px-6">
+                      <ul role="list" className="space-y-8">
+                        {comments.map((comment:any) => (
+                          <li key={comment.id}>
+                            <div className="flex space-x-3">
+                              <div className="flex-shrink-0">
+                                {/* <img
+                                  className="h-10 w-10 rounded-full"
+                                  src={`https://images.unsplash.com/photo-${comment.imageId}?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80`}
+                                  alt=""
+                                /> */}
+                                                        <CircleUser className="h-10 w-10 rounded-full" />
 
-              <div className="mt-10">
-                <h3 className="text-lg font-medium text-gray-900">Share your thoughts</h3>
-                <p className="mt-1 text-sm text-gray-600">
-                  If you’ve used this product, share your thoughts with other customers
-                </p>
-
-                <a
-                  href="#"
-                  className="mt-6 inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 sm:w-auto lg:w-full"
-                >
-                  Write a review
-                </a>
-              </div>
-            </div>
-
-            <div className="mt-16 lg:col-span-7 lg:col-start-6 lg:mt-0">
-              <h3 className="sr-only">Recent reviews</h3>
-
-              <div className="flow-root">
-                <div className="-my-12 divide-y divide-gray-200">
-                  {reviews.featured.map((review) => (
-                    <div key={review.id} className="py-12">
-                      <div className="flex items-center">
-                        <img src={review.avatarSrc} alt={`${review.author}.`} className="h-12 w-12 rounded-full" />
-                        <div className="ml-4">
-                          <h4 className="text-sm font-bold text-gray-900">{review.author}</h4>
-                          <div className="mt-1 flex items-center">
-                            {[0, 1, 2, 3, 4].map((rating) => (
-                              <StarIcon
-                                key={rating}
-                                className={classNames(
-                                  review.rating > rating ? 'text-yellow-400' : 'text-gray-300',
-                                  'h-5 w-5 flex-shrink-0'
-                                )}
+                              </div>
+                              <div>
+                                <div className="text-sm">
+                                  <a href="#" className="font-medium text-gray-900">
+                                    {comment.name}
+                                  </a>
+                                </div>
+                                <div className="mt-1 text-sm text-gray-700">
+                                  <p>{comment.comment}</p>
+                                </div>
+                                <div className="mt-2 space-x-2 text-sm">
+                                  <span className="font-medium text-gray-500">{formattedDate(comment.created_at)}</span>{' '}
+                                  <span className="font-medium text-gray-500">&middot;</span>{' '}
+                                  <button type="button" className="font-medium text-gray-900">
+                                    Reply
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 px-4 py-6 sm:px-6">
+                    <div className="flex space-x-3">
+                      <div className="flex-shrink-0">
+                        <CircleUser className="h-10 w-10 rounded-full" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <form onSubmit={(e) => addComment(e,file.photo.id,newComment)}>
+                          <div>
+                            <label htmlFor="comment" className="sr-only">
+                              About
+                            </label>
+                            <textarea
+                              id="comment"
+                              name="comment"
+                              rows={3}
+                              value={newComment}
+                              onChange={(e) => setNewComment(e.target.value)}
+                              className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                              placeholder="Add a note"
+                              defaultValue={''}
+                            />
+                          </div>
+                          <div className="mt-3 flex items-center justify-between">
+                           
+                              <QuestionMarkCircleIcon
+                                className="h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                                 aria-hidden="true"
                               />
-                            ))}
+                              <span>Some HTML is okay.</span>
+                            <button
+                              type="submit"
+                              className="inline-flex items-center justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                            >
+                              Comment
+                            </button>
                           </div>
-                          <p className="sr-only">{review.rating} out of 5 stars</p>
-                        </div>
+                        </form>
                       </div>
-
-                      <div
-                        className="mt-4 space-y-6 text-base italic text-gray-600"
-                        dangerouslySetInnerHTML={{ __html: review.content }}
-                      />
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
+              </section>
+            
       </main>
 
-      <footer aria-labelledby="footer-heading" className="bg-white">
-        <h2 id="footer-heading" className="sr-only">
-          Footer
-        </h2>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="border-t border-gray-200 py-20">
-            <div className="grid grid-cols-1 md:grid-flow-col md:auto-rows-min md:grid-cols-12 md:gap-x-8 md:gap-y-16">
-              {/* Image section */}
-              <div className="col-span-1 md:col-span-2 lg:col-start-1 lg:row-start-1">
-                <img
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                  alt=""
-                  className="h-8 w-auto"
-                />
-              </div>
-
-              {/* Sitemap sections */}
-              <div className="col-span-6 mt-10 grid grid-cols-2 gap-8 sm:grid-cols-3 md:col-span-8 md:col-start-3 md:row-start-1 md:mt-0 lg:col-span-6 lg:col-start-2">
-                <div className="grid grid-cols-1 gap-y-12 sm:col-span-2 sm:grid-cols-2 sm:gap-x-8">
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-900">Products</h3>
-                    <ul role="list" className="mt-6 space-y-6">
-                      {footerNavigation.products.map((item) => (
-                        <li key={item.name} className="text-sm">
-                          <a href={item.href} className="text-gray-500 hover:text-gray-600">
-                            {item.name}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-900">Company</h3>
-                    <ul role="list" className="mt-6 space-y-6">
-                      {footerNavigation.company.map((item) => (
-                        <li key={item.name} className="text-sm">
-                          <a href={item.href} className="text-gray-500 hover:text-gray-600">
-                            {item.name}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium text-gray-900">Customer Service</h3>
-                  <ul role="list" className="mt-6 space-y-6">
-                    {footerNavigation.customerService.map((item) => (
-                      <li key={item.name} className="text-sm">
-                        <a href={item.href} className="text-gray-500 hover:text-gray-600">
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              {/* Newsletter section */}
-              <div className="mt-12 md:col-span-8 md:col-start-3 md:row-start-2 md:mt-0 lg:col-span-4 lg:col-start-9 lg:row-start-1">
-                <h3 className="text-sm font-medium text-gray-900">Sign up for our newsletter</h3>
-                <p className="mt-6 text-sm text-gray-500">The latest deals and savings, sent to your inbox weekly.</p>
-                <form className="mt-2 flex sm:max-w-md">
-                  <label htmlFor="email-address" className="sr-only">
-                    Email address
-                  </label>
-                  <input
-                    id="email-address"
-                    type="text"
-                    autoComplete="email"
-                    required
-                    className="w-full min-w-0 appearance-none rounded-md border border-gray-300 bg-white px-4 py-2 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                  />
-                  <div className="ml-4 flex-shrink-0">
-                    <button
-                      type="submit"
-                      className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
-                      Sign up
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-100 py-10 text-center">
-            <p className="text-sm text-gray-500">&copy; 2021 Your Company, Inc. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }
