@@ -183,4 +183,16 @@ AWS_QUERYSTRING_AUTH=False
 AWS_QUERYSTRING_EXPIRE = 63115200
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://localhost:8081","http://127.0.0.1:3000","http://127.0.0.1:8081",'https://next-django-saas-template.vercel.app','https://next-django-saas-template-production.up.railway.app',"http://0.0.0.0:3000","https://cloud-computing-cw.vercel.app","https://main.d8a3ju6lrxtf0.amplifyapp.com","https://cloud-computing-cw-django-backend-4084292849248242048.elasticbeanstalk.com"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://localhost:8081","http://127.0.0.1:3000","http://127.0.0.1:8081",'https://next-django-saas-template.vercel.app','https://next-django-saas-template-production.up.railway.app',"http://0.0.0.0:3000","https://cloud-computing-cw.vercel.app","https://main.d8a3ju6lrxtf0.amplifyapp.com","https://cloud-computing-cw-django-backend-4084292849248242048.elasticbeanstalk.com","https://city-final-project.vercel.app"]
+# EMAIL_HOST = env('EMAIL_HOST')
+# EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS=True
+# DEFAULT_FROM_EMAIL = 'alisiddique10@hotmail.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST="smtp.sendgrid.net"
+EMAIL_HOST_USER="apikey" 
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_PASSWORD="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"

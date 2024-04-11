@@ -11,3 +11,9 @@ def get_logs(request):
     serialized_logs = LogSerializer(users_logs, many=True)
     return Response(serialized_logs.data)
     
+
+@api_view(["DELETE"])
+def delete_log(request, pk):
+    log = Log.objects.get(pk=pk)
+    log.delete()
+    return Response({"results": "log deleted"})

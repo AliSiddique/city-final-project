@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import label, UploadPhoto, get_users_photos, label_image, get_single_photo, search_photos, get_analytics, add_comment
+from .views import label, UploadPhoto, get_users_photos, label_image, get_single_photo, search_photos, get_analytics, add_comment,delete_photo,get_labelled_photos
 
 labelling_urlpatterns = [
     path("api/upload-image", label, name="upload_image"),
@@ -9,5 +9,7 @@ labelling_urlpatterns = [
     path("api/get-photo/<int:pk>", get_single_photo, name="get_photo"),
     path("api/search-photos", search_photos, name="search_photos"),
     path("api/analytics", get_analytics, name="analytics"),
-    path("api/add-comment",add_comment)
+    path("api/add-comment",add_comment),
+    path("api/delete-photo/<int:pk>", delete_photo, name="delete_photo"),
+    path("api/get-labelled-image/", get_labelled_photos, name="get_labelled_image")
 ]

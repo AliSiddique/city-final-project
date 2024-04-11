@@ -7,7 +7,7 @@ from rest_framework import serializers
 class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
-        fields = ('id', 'image',"name","uploaded_at","isLabelled")
+        fields = ('id', 'image',"name","uploaded_at","isLabelled","tag")
         read_only_fields = ('user',)
 
 

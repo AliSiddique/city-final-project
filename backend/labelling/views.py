@@ -23,6 +23,8 @@ from django.db.models.functions import TruncDate
 from datetime import datetime
 from django.db.models import Sum
 from log.models import Log
+from django.core.mail import EmailMessage
+from django.core.mail import EmailMultiAlternatives
 
 
 
@@ -202,11 +204,18 @@ def label_image(request):
     image_file = InMemoryUploadedFile(image_io, None, 'image.jpg', 'image/jpeg', image_io.tell(), None)
     ijs =LabelledImagesAnalytics.objects.create(amount=1, user=User.objects.get(username=request.user))
     ijs.save()
+    # email = EmailMessage("ali", "Your image was just labelled", to=["alisiddique0402@gmail.com"], from_email='alisiddique10@hotmail.com',body=`<img src="https://unsplash.com/photos/an-aerial-view-of-a-house-in-the-middle-of-a-forest-jydr6E3DvyI">`)
+    # email.send()
     
     ii = LabelledImage(image=image_num,labelled_image=image_file, label="test", confidence=0.5, x=0.5, y=0.5, w=0.5, h=0.5)
     # ii.labelled_image.save("ad.png", ContentFile(im_array.tobytes()))
 
-
+    subject, from_email, to = "hello", "alisiddique10@hotmail.com", "alisiddique0402@gmail.com"
+    text_content = "This is an important message."
+    html_content = f"<div> <img src={ii.labelled_image.url} /> is an <strong>important</strong> message.</div>"
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
 
     ii.save()
     image_num.isLabelled = True
@@ -227,3 +236,23 @@ def add_comment(request):
     ic.save()
 
     return JsonResponse({"results": "Comment added"})
+
+
+
+@api_view(['DELETE'])
+def delete_photo(request, pk):
+    image = Image.objects.get(id=pk)
+    image.delete()
+
+    return JsonResponse({"results": "Photo deleted"})
+
+
+
+@api_view(['GET'])
+def get_labelled_photos(request):
+    labelled_photos = LabelledImage.objects.filter(image__user=request.user)
+    serializer = LabelledImageSerializer(labelled_photos, many=True)
+    labelled_images = [labelled.labelled_image.url for labelled in labelled_photos]
+
+
+    return Response({"labelled_images": labelled_images})
