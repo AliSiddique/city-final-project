@@ -22,6 +22,7 @@ import {
     Squares2X2Icon as Squares2X2IconMini,
 } from "@heroicons/react/20/solid"
 import { toast } from "sonner"
+import { BASEURL } from "@/API/APIRoute"
 
 const navigation = [
     { name: "Home", href: "#", icon: HomeIcon, current: false },
@@ -175,7 +176,7 @@ export default function Upload({ token }: { token: string }) {
             }
 
             // Now you can proceed with the fetch request using requestOptions
-            await fetch(`http://127.0.0.1:8000/api/photo`, requestOptions)
+            await fetch(`${BASEURL}/api/photo`, requestOptions)
                 .then((response) => {
                     response.text()
                     //   window.location.reload()

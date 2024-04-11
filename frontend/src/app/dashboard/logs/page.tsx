@@ -1,3 +1,4 @@
+import { BASEURL } from "@/API/APIRoute"
 import LogTable from "@/components/app/dashboard/LogTable"
 import axios from "axios"
 import { cookies } from "next/headers"
@@ -6,7 +7,7 @@ import React from "react"
 type Props = {}
 const getUsersLogs = async () => {
     const token = cookies().get("token")
-    const res = await axios.get(`http://127.0.0.1:8000/api/users-logs`, {
+    const res = await axios.get(`${BASEURL}/api/users-logs`, {
         headers: {
             Authorization: `Token ${token?.value}`,
         },
