@@ -2,7 +2,7 @@
 import { BASEURL } from '@/API/APIRoute'
 import PhotosTable from '@/components/app/dashboard/PhotosTable'
 import { useSearchParams } from 'next/navigation'
-import React, { Suspense, useEffect } from 'react'
+import React, {  useEffect } from 'react'
 
 type Props = {}
 
@@ -23,10 +23,7 @@ export default function page({}: Props) {
     }, [query])
   return (
     <div>
-          <Suspense>
-
       <PhotosTable files={data} />
-      </Suspense>
     </div>
   )
 }
