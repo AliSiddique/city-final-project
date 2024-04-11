@@ -7,6 +7,8 @@ class Image(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     isLabelled = models.BooleanField(default=False)
+    tag = models.CharField(max_length=255, null=True, blank=True)
+    
   
     user = models.ForeignKey("auth.User", on_delete=models.CASCADE, null=True, blank=True)
     def formatted_uploaded_at(self):

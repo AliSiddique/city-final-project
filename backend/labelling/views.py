@@ -22,13 +22,13 @@ from django.db.models import Count
 from django.db.models.functions import TruncDate
 from datetime import datetime
 from django.db.models import Sum
+from log.models import Log
 
 
 
 
 class UploadPhoto(APIView):
     serializer_class = Image
-    # parser_classes = (MultiPartParser, FormParser)
 
     def post(self, request, *args, **kwargs):
         print(request.user)
@@ -40,6 +40,10 @@ class UploadPhoto(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)   
+        
+
+
+
 
 @api_view(['POST'])
 def label(request):
@@ -88,8 +92,6 @@ def get_users_photos(request):
     user = User.objects.get(username=request.user)
     photos = Image.objects.filter(user=user)
     serializer = PhotoSerializer(photos, many=True)
-
-
     return Response(serializer.data)
 
 @api_view(['GET'])
@@ -193,6 +195,8 @@ def label_image(request):
     image_io = BytesIO()
     im.save(image_io, format='JPEG')
     image_num = Image.objects.get(pk=id)
+    log_url = "/api/label"
+    Log.objects.create(log="image.labelled.success",url=log_url,method="GET", user=User.objects.get(username=request.user))
     
     # Create InMemoryUploadedFile from BytesIO
     image_file = InMemoryUploadedFile(image_io, None, 'image.jpg', 'image/jpeg', image_io.tell(), None)

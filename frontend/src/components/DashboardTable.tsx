@@ -55,7 +55,7 @@ export default function DashboardTable({files}: Props) {
     <div className="flex items-center">
       <TabsList>
         <TabsTrigger value="all">All</TabsTrigger>
-        <TabsTrigger value="active">Active</TabsTrigger>
+        <TabsTrigger value="active">Labelled</TabsTrigger>
         <TabsTrigger value="draft">Draft</TabsTrigger>
         <TabsTrigger value="archived" className="hidden sm:flex">
           Archived
