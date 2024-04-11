@@ -1,7 +1,9 @@
 "use client"
 
-import { Badge } from "./ui/badge";
-// Define the possible log formats
+import LogView from "./LogView";
+import React, { useState } from "react";
+import { Badge } from "../../ui/badge";
+import { formattedDate } from "@/lib/utils";
 type LogFormat =
   | "image.uploaded"
   | "image.labelled.success"
@@ -10,7 +12,6 @@ type LogFormat =
   | "image.delete"
   | "image.labelled.failed";
 
-// Define the Logs interface with the updated log property
 interface Logs {
   id: string;
   log: LogFormat;
@@ -19,12 +20,10 @@ interface Logs {
   url: string;
 }
 
-// Define a type to represent the color for each log format
 type LogColor = {
   [key in LogFormat]: string;
 };
 
-// Define the colors for each log format
 const logColors: LogColor = {
   'image.uploaded': 'bg-green-500',
   'image.labelled.success': 'bg-green-500',
@@ -35,6 +34,7 @@ const logColors: LogColor = {
 };
 
   export default function LogTable({ logs }: { logs: Logs[] }) {
+    const [open, setOpen] = useState(false);
     
     const downloadCSV = () => {
         const csvContent = "data:text/csv;charset=utf-8," +
@@ -50,20 +50,7 @@ const logColors: LogColor = {
         document.body.appendChild(link);
         link.click();
       };
-    function formattedDate(dates:any) {
-        const datess = new Date(dates);
-        const options:any = {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          timeZone: 'UTC' // Or your desired timezone
-        };
-        
-        return new Intl.DateTimeFormat('en-US', options).format(datess);
-      }
+
     return (
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:items-center">
@@ -124,9 +111,21 @@ const logColors: LogColor = {
                     </th>
                   </tr>
                 </thead>
+               
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {logs.map((log:Logs) => (
                     <tr key={log.id}>
+                         {open && (
+                    <LogView
+                    id={log.id}
+                    log={log.log}
+                    created_at={log.created_at}
+                    method={log.method}
+                    url={log.url}
+
+                      open={open}
+                      setOpen={setOpen} />
+                )}
                       <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-0">{log.id}</td>
                       <td className="whitespace-nowrap px-2 py-2 text-sm font-medium text-gray-900">
                         <Badge className={logColors[log.log]}>{log.log}</Badge> 
@@ -135,9 +134,9 @@ const logColors: LogColor = {
                       <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">{log.method}</td>
                       <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">{formattedDate(log.created_at)}</td>
                       <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                        <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                          Edit<span className="sr-only">, {log.id}</span>
-                        </a>
+                        <button onClick={() => setOpen(!open)} className="text-indigo-600 hover:text-indigo-900">
+                          View<span className="sr-only">, {log.id}</span>
+                        </button>
                       </td>
                     </tr>
                   ))}

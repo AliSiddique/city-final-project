@@ -1,6 +1,10 @@
 import axios, { AxiosError } from "axios"
-import { TypedDispatch } from "../../../store"
-import { setToken, setUserInfo, setVerifyEmailStatus } from "./slices/authReducers"
+import { TypedDispatch } from "@/store/store"
+import {
+    setToken,
+    setUserInfo,
+    setVerifyEmailStatus,
+} from "./slices/authReducers"
 import { UserType } from "./slices/authReducers"
 import { BASEURL } from "@/API/APIRoute"
 

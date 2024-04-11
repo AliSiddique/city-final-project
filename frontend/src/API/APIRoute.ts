@@ -5,7 +5,3 @@ if (process.env.NODE_ENV === "development") {
 } else {
     BASEURL = "https://api.findmyaccom.com"
 }
-
-
-
-

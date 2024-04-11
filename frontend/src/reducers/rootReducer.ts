@@ -1,9 +1,9 @@
-import { combineReducers } from "redux";
+import { combineReducers } from "redux"
 
-import authReducer from "../reducers/slices/authReducers";
+import authReducer from "../reducers/slices/authReducers"
 
 export default function createRootReducer() {
-  return combineReducers({
-    auth: authReducer,
-  });
+    return combineReducers({
+        auth: authReducer,
+    })
 }
