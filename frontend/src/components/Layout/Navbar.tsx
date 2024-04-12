@@ -1,3 +1,4 @@
+import Link from "next/link"
 import React from "react"
 
 type Props = {}
@@ -9,7 +10,6 @@ export default function Navbar({}: Props) {
                 <div className="lg:max-w-xl mx-auto px-8">
                     <div className="w-full mx-auto">
                         <div
-                            x-data="{ open: false }"
                             className="relative flex flex-col w-full p-3 mx-auto bg-black/70 border border-white/10 shadow-thick backdrop-blur-xl backdrop-filter rounded-xl md:rounded-full md:items-center md:justify-between md:flex-row md:px-6"
                         >
                             <div className="flex flex-row items-center justify-between md:justify-start">
@@ -40,7 +40,7 @@ export default function Navbar({}: Props) {
                                         ></path>
                                     </svg>
 
-                                    <span>Buio</span>
+                                    <span>Open comp</span>
                                 </a>
                                 <button className="inline-flex items-center justify-center p-2 text-zinc-400 hover:text-blue-300 focus:outline-none focus:text-white md:hidden">
                                     <svg
@@ -68,7 +68,7 @@ export default function Navbar({}: Props) {
                             </div>
                             <nav className="flex-col flex-grow hidden py-12 md:py-0 md:flex md:items-end justify-center md:flex-row">
                                 <ul className="space-y-2 list-none md:space-y-0 text-xs text-white md:ml-auto items-center md:inline-flex justify-center text-center md:text-left gap-3">
-                                    <li>
+                                    {/* <li>
                                         <a
                                             href="/"
                                             title="link to your page"
@@ -87,17 +87,17 @@ export default function Navbar({}: Props) {
                                         >
                                             Style Guide
                                         </a>
-                                    </li>
+                                    </li> */}
 
                                     <li>
-                                        <a
-                                            href="https://lexingtonthemes.lemonsqueezy.com/checkout/buy/7c47adfc-931d-44b3-ba34-7eea96f43121"
+                                        <Link
+                                            href={"/user/login"}
                                             title="link to your page"
                                             aria-label="your label"
                                             className="py-1.5 px-4 border focus:ring-2 text-xs rounded-full border-transparent bg-white hover:bg-white/10 text-black duration-200 focus:ring-offset-2 focus:ring-white hover:text-white inline-flex items-center justify-center ring-1 ring-transparent lg:ml-auto"
                                         >
-                                            Buy Buio
-                                        </a>
+                                            Login
+                                        </Link>
                                     </li>
                                 </ul>
                             </nav>

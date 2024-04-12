@@ -1,27 +1,12 @@
-import { BASEURL } from "@/API/APIRoute"
 import Photos from "@/components/app/dashboard/Photos"
-import axios from "axios"
+import { getBackendDetails } from "@/lib/utils"
 import { cookies } from "next/headers"
 import React from "react"
 
 type Props = {}
 
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(" ")
-}
-
-const getUsersPhotos = async () => {
-    const token = cookies().get("token")
-    const res = await axios.get(`http://127.0.0.1:8000/api/users-photos`, {
-        headers: {
-            Authorization: `Token ${token?.value}`,
-        },
-    })
-
-    return res.data
-}
 async function page({}: Props) {
-    const files = await getUsersPhotos()
+    const files = await getBackendDetails(cookies().get("token")?.value!, "api/users-photos")
     return (
         <div>
             <Photos files={files} />

@@ -1,7 +1,7 @@
-import Features from "@/components/Features"
-import FeaturesTwo from "@/components/FeaturesTwo"
-import Hero from "@/components/Hero"
-import Navbar from "@/components/Layout/Navbar"
+import Features from "@/components/Home/Features"
+import FeaturesTwo from "@/components/Home/FeaturesTwo"
+import Hero from "@/components/Home/Hero"
+import Navbar from "@/components/Home/Navbar"
 import React from "react"
 
 type Props = {}

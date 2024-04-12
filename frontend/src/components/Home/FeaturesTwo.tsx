@@ -1,22 +1,23 @@
+import Link from "next/link";
 import React from "react"
 
 type Props = {}
 const sections = [
     {
-        title: "Export and Sharing Options",
+        title: "Image Export and Sharing",
         description:
-            "Stay up-to-date with live data charts. Our charts dynamically update as new data becomes available, giving you real-time insights into your metrics.",
+            "Effortlessly export and share labeled images with team members or stakeholders. Enable seamless collaboration and decision-making by providing easy access to visual data.",
         imageSrc: "/images/assets/square.svg",
-        imageAlt: "",
+        imageAlt: "Image Export and Sharing Icon",
     },
     {
         title: "Interactive Annotations",
         description:
-            "Enhance your data visualization with interactive annotations. Make your charts more informative and engaging by adding context directly ",
+            "Enrich your labeled images with interactive annotations. Enhance understanding and communication by adding context directly onto images, facilitating clearer insights and discussions.",
         imageSrc: "/images/assets/circuitry.svg",
-        imageAlt: "",
+        imageAlt: "Interactive Annotations Icon",
     },
-]
+];
 
 export default function FeaturesTwo({}: Props) {
     return (
@@ -26,19 +27,17 @@ export default function FeaturesTwo({}: Props) {
                     <div className="lg:text-center max-w-2xl lg:mx-auto">
                         <span className="text-blue-400">
                             {" "}
-                            Comparative Analysis
+                            Features
                         </span>
                         <h2 className="text-3xl tracking-tight mt-6 font-light lg:text-4xl text-white">
-                            Live data charts for{" "}
+                            Add comments{" "}
                             <span className="block text-zinc-400">
-                                up-to-the-minute insights
+                                to your images.
                             </span>
                         </h2>
                         <p className="mt-5 text-white max-w-md mx-auto">
-                            Tell a compelling story with our engaging
-                            infographic charts. Transform your data into
-                            visually stunning infographics that captivate your
-                            audience.
+                            Open comp provides a range of features to help you
+                            label and manage your visual data effectively.
                         </p>
                     </div>
 
@@ -63,31 +62,21 @@ export default function FeaturesTwo({}: Props) {
 
                         <div className="mt-12 h-full lg:mt-0 bg-gradientup ring-1 text-center ring-white/10 rounded-4xl p-8 lg:p-20 lg:col-span-full">
                             <h2 className="text-3xl mt-6 tracking-tight font-light lg:text-4xl text-white">
-                                Export and Sharing Options
+                                Export your data
                             </h2>
                             <p className="mt-4 text-sm text-zinc-300 max-w-xl mx-auto">
-                                Stay up-to-date with live data charts. Our
-                                charts dynamically update as new data becomes
-                                available, giving you real-time insights into
-                                your metrics.
+                              Export all your data.
                             </p>
                             <div className="mt-10 flex items-center justify-center gap-x-6">
-                                <a
-                                    href="#_"
+                                <Link
+                                    href="/"
                                     title="link to your page"
                                     aria-label="your label"
                                     className="text-sm py-2 px-4 border focus:ring-2 rounded-full border-transparent bg-white hover:bg-white/10 text-black duration-200 focus:ring-offset-2 focus:ring-white hover:text-white inline-flex items-center justify-center ring-1 ring-transparent"
                                 >
                                     Get started
-                                </a>
-                                <a
-                                    href="#_"
-                                    title="link to your page"
-                                    aria-label="your label"
-                                    className="text-sm hover:text-blue-200 text-white"
-                                >
-                                    Learn more <span aria-hidden="true">→</span>
-                                </a>
+                                </Link>
+                            
                             </div>
                         </div>
                     </div>

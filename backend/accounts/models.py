@@ -6,7 +6,6 @@ from django.dispatch import receiver
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
-    # custom fields for user
     plan = models.CharField(max_length=200, default="free", blank=True)
     subscription_id = models.CharField(max_length=200, blank=True)
 

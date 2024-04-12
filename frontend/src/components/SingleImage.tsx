@@ -1,12 +1,10 @@
 "use client"
-import { FormEvent, Fragment, useEffect, useState } from "react"
-import { Dialog, Popover, RadioGroup, Tab, Transition } from "@headlessui/react"
+import { FormEvent, useEffect, useState } from "react"
+import {  RadioGroup } from "@headlessui/react"
 import {
-    Bars3Icon,
-    MagnifyingGlassIcon,
-    ShieldCheckIcon,
+    
     ShoppingBagIcon,
-    XMarkIcon,
+
 } from "@heroicons/react/24/outline"
 import { CircleUser, File, ListFilter, PlusCircle } from "lucide-react"
 
@@ -28,140 +26,11 @@ import { BASEURL } from "@/API/APIRoute"
 import axios from "axios"
 import { Button } from "./ui/button"
 import Link from "next/link"
+import { formattedDate } from "@/lib/utils"
+import { Badge } from "./ui/badge"
 
-const navigation = {
-    categories: [
-        {
-            id: "women",
-            name: "Women",
-            featured: [
-                {
-                    name: "New Arrivals",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg",
-                    imageAlt:
-                        "Models sitting back to back, wearing Basic Tee in black and bone.",
-                },
-                {
-                    name: "Basic Tees",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg",
-                    imageAlt:
-                        "Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.",
-                },
-            ],
-            sections: [
-                {
-                    id: "clothing",
-                    name: "Clothing",
-                    items: [
-                        { name: "Tops", href: "#" },
-                        { name: "Dresses", href: "#" },
-                        { name: "Pants", href: "#" },
-                        { name: "Denim", href: "#" },
-                        { name: "Sweaters", href: "#" },
-                        { name: "T-Shirts", href: "#" },
-                        { name: "Jackets", href: "#" },
-                        { name: "Activewear", href: "#" },
-                        { name: "Browse All", href: "#" },
-                    ],
-                },
-                {
-                    id: "accessories",
-                    name: "Accessories",
-                    items: [
-                        { name: "Watches", href: "#" },
-                        { name: "Wallets", href: "#" },
-                        { name: "Bags", href: "#" },
-                        { name: "Sunglasses", href: "#" },
-                        { name: "Hats", href: "#" },
-                        { name: "Belts", href: "#" },
-                    ],
-                },
-                {
-                    id: "brands",
-                    name: "Brands",
-                    items: [
-                        { name: "Full Nelson", href: "#" },
-                        { name: "My Way", href: "#" },
-                        { name: "Re-Arranged", href: "#" },
-                        { name: "Counterfeit", href: "#" },
-                        { name: "Significant Other", href: "#" },
-                    ],
-                },
-            ],
-        },
-        {
-            id: "men",
-            name: "Men",
-            featured: [
-                {
-                    name: "New Arrivals",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg",
-                    imageAlt:
-                        "Drawstring top with elastic loop closure and textured interior padding.",
-                },
-                {
-                    name: "Artwork Tees",
-                    href: "#",
-                    imageSrc:
-                        "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg",
-                    imageAlt:
-                        "Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.",
-                },
-            ],
-            sections: [
-                {
-                    id: "clothing",
-                    name: "Clothing",
-                    items: [
-                        { name: "Tops", href: "#" },
-                        { name: "Pants", href: "#" },
-                        { name: "Sweaters", href: "#" },
-                        { name: "T-Shirts", href: "#" },
-                        { name: "Jackets", href: "#" },
-                        { name: "Activewear", href: "#" },
-                        { name: "Browse All", href: "#" },
-                    ],
-                },
-                {
-                    id: "accessories",
-                    name: "Accessories",
-                    items: [
-                        { name: "Watches", href: "#" },
-                        { name: "Wallets", href: "#" },
-                        { name: "Bags", href: "#" },
-                        { name: "Sunglasses", href: "#" },
-                        { name: "Hats", href: "#" },
-                        { name: "Belts", href: "#" },
-                    ],
-                },
-                {
-                    id: "brands",
-                    name: "Brands",
-                    items: [
-                        { name: "Re-Arranged", href: "#" },
-                        { name: "Counterfeit", href: "#" },
-                        { name: "Full Nelson", href: "#" },
-                        { name: "My Way", href: "#" },
-                    ],
-                },
-            ],
-        },
-    ],
-    pages: [
-        { name: "Company", href: "#" },
-        { name: "Stores", href: "#" },
-    ],
-}
-const userNavigation = [
-    { name: "Sign in", href: "#" },
-    { name: "Create account", href: "#" },
-]
+
+
 const product = {
     name: "Everyday Ruck Snack",
     href: "#",
@@ -217,56 +86,8 @@ const policies = [
             "https://tailwindui.com/img/ecommerce/icons/icon-gift-card-light.svg",
     },
 ]
-const reviews = {
-    average: 4,
-    totalCount: 1624,
-    counts: [
-        { rating: 5, count: 1019 },
-        { rating: 4, count: 162 },
-        { rating: 3, count: 97 },
-        { rating: 2, count: 199 },
-        { rating: 1, count: 147 },
-    ],
-    featured: [
-        {
-            id: 1,
-            rating: 5,
-            content: `
-        <p>This is the bag of my dreams. I took it on my last vacation and was able to fit an absurd amount of snacks for the many long and hungry flights.</p>
-      `,
-            author: "Emily Selman",
-            avatarSrc:
-                "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80",
-        },
-        // More reviews...
-    ],
-}
-const footerNavigation = {
-    products: [
-        { name: "Bags", href: "#" },
-        { name: "Tees", href: "#" },
-        { name: "Objects", href: "#" },
-        { name: "Home Goods", href: "#" },
-        { name: "Accessories", href: "#" },
-    ],
-    company: [
-        { name: "Who we are", href: "#" },
-        { name: "Sustainability", href: "#" },
-        { name: "Press", href: "#" },
-        { name: "Careers", href: "#" },
-        { name: "Terms & Conditions", href: "#" },
-        { name: "Privacy", href: "#" },
-    ],
-    customerService: [
-        { name: "Contact", href: "#" },
-        { name: "Shipping", href: "#" },
-        { name: "Returns", href: "#" },
-        { name: "Warranty", href: "#" },
-        { name: "Secure Payments", href: "#" },
-        { name: "FAQ", href: "#" },
-        { name: "Find a store", href: "#" },
-    ],
-}
+
+
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ")
@@ -321,20 +142,7 @@ export default function SingleImage({ token, file }: Props) {
             },
         ])
     }
-    function formattedDate(dates: any) {
-        const datess = new Date(dates ?? "2024-06-07")
-        const options: any = {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-            timeZone: "UTC", // Or your desired timezone
-        }
 
-        return new Intl.DateTimeFormat("en-US", options).format(datess)
-    }
     useEffect(() => {}, [comments])
 
     return (
@@ -361,46 +169,10 @@ export default function SingleImage({ token, file }: Props) {
                                     id="information-heading"
                                     className="sr-only"
                                 >
-                                    Product information
+                                   Information
                                 </h2>
 
-                                <div className="flex items-center">
-                                    <p className="text-lg text-gray-900 sm:text-xl">
-                                        {product.price}
-                                    </p>
-
-                                    <div className="ml-4 border-l border-gray-300 pl-4">
-                                        <h2 className="sr-only">Reviews</h2>
-                                        <div className="flex items-center">
-                                            <div>
-                                                <div className="flex items-center">
-                                                    {[0, 1, 2, 3, 4].map(
-                                                        (rating) => (
-                                                            <StarIcon
-                                                                key={rating}
-                                                                className={classNames(
-                                                                    reviews.average >
-                                                                        rating
-                                                                        ? "text-yellow-400"
-                                                                        : "text-gray-300",
-                                                                    "h-5 w-5 flex-shrink-0"
-                                                                )}
-                                                                aria-hidden="true"
-                                                            />
-                                                        )
-                                                    )}
-                                                </div>
-                                                <p className="sr-only">
-                                                    {reviews.average} out of 5
-                                                    stars
-                                                </p>
-                                            </div>
-                                            <p className="ml-2 text-sm text-gray-500">
-                                                {reviews.totalCount} reviews
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
+                          
 
                                 <div className="mt-4 space-y-6">
                                     <p className="text-base text-gray-500">
@@ -413,9 +185,9 @@ export default function SingleImage({ token, file }: Props) {
                                         className="h-5 w-5 flex-shrink-0 text-green-500"
                                         aria-hidden="true"
                                     />
-                                    <p className="ml-2 text-sm text-gray-500">
-                                        In stock and ready to ship
-                                    </p>
+                                    <div className="ml-2 text-sm text-gray-500">
+                                       {file.isLabelled ? <Badge className="bg-green-500">Labelled</Badge> : <Badge className="bg-red-500">Not Labelled</Badge>}
+                                    </div>
                                 </div>
                             </section>
                         </div>
@@ -503,18 +275,7 @@ export default function SingleImage({ token, file }: Props) {
                                             </div>
                                         </RadioGroup>
                                     </div>
-                                    <div className="mt-4">
-                                        <a
-                                            href="#"
-                                            className="group inline-flex text-sm text-gray-500 hover:text-gray-700"
-                                        >
-                                            <span>What size should I buy?</span>
-                                            <QuestionMarkCircleIcon
-                                                className="ml-2 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                                                aria-hidden="true"
-                                            />
-                                        </a>
-                                    </div>
+                                
                                     <div className="mt-10">
                                         <button
                                             type="submit"
@@ -524,20 +285,7 @@ export default function SingleImage({ token, file }: Props) {
                                             Label
                                         </button>
                                     </div>
-                                    <div className="mt-6 text-center">
-                                        <a
-                                            href="#"
-                                            className="group inline-flex text-base font-medium"
-                                        >
-                                            <ShieldCheckIcon
-                                                className="mr-2 h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                                                aria-hidden="true"
-                                            />
-                                            <span className="text-gray-500 hover:text-gray-700">
-                                                Lifetime Guarantee
-                                            </span>
-                                        </a>
-                                    </div>
+                                 
                                 </form>
                             </section>
                         </div>
@@ -654,32 +402,7 @@ export default function SingleImage({ token, file }: Props) {
                         </div>
                     </section>
 
-                    {/* Policies section */}
-                    <section
-                        aria-labelledby="policy-heading"
-                        className="mt-16 lg:mt-24"
-                    >
-                        <h2 id="policy-heading" className="sr-only">
-                            Our policies
-                        </h2>
-                        <div className="grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 lg:gap-x-8">
-                            {policies.map((policy) => (
-                                <div key={policy.name}>
-                                    <img
-                                        src={policy.imageSrc}
-                                        alt=""
-                                        className="h-24 w-auto"
-                                    />
-                                    <h3 className="mt-6 text-base font-medium text-gray-900">
-                                        {policy.name}
-                                    </h3>
-                                    <p className="mt-3 text-base text-gray-500">
-                                        {policy.description}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
+              
                 </div>
 
                 <section aria-labelledby="notes-title">
@@ -704,7 +427,7 @@ export default function SingleImage({ token, file }: Props) {
                                   src={`https://images.unsplash.com/photo-${comment.imageId}?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80`}
                                   alt=""
                                 /> */}
-                                                    <CircleUser className="h-10 w-10 rounded-full" />
+                                                    <CircleUser className="h-5  w-5 rounded-full" />
                                                 </div>
                                                 <div>
                                                     <div className="text-sm">
@@ -724,15 +447,7 @@ export default function SingleImage({ token, file }: Props) {
                                                                 comment.created_at
                                                             )}
                                                         </span>{" "}
-                                                        <span className="font-medium text-gray-500">
-                                                            &middot;
-                                                        </span>{" "}
-                                                        <button
-                                                            type="button"
-                                                            className="font-medium text-gray-900"
-                                                        >
-                                                            Reply
-                                                        </button>
+                                                 
                                                     </div>
                                                 </div>
                                             </div>
@@ -744,7 +459,7 @@ export default function SingleImage({ token, file }: Props) {
                         <div className="bg-gray-50 px-4 py-6 sm:px-6">
                             <div className="flex space-x-3">
                                 <div className="flex-shrink-0">
-                                    <CircleUser className="h-10 w-10 rounded-full" />
+                                    <CircleUser className="h-5 w-5 rounded-full" />
                                 </div>
                                 <div className="min-w-0 flex-1">
                                     <form
@@ -779,17 +494,13 @@ export default function SingleImage({ token, file }: Props) {
                                             />
                                         </div>
                                         <div className="mt-3 flex items-center justify-between">
-                                            <QuestionMarkCircleIcon
-                                                className="h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                                                aria-hidden="true"
-                                            />
-                                            <span>Some HTML is okay.</span>
-                                            <button
+                                         
+                                            <Button
                                                 type="submit"
                                                 className="inline-flex items-center justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                                             >
                                                 Comment
-                                            </button>
+                                            </Button>
                                         </div>
                                     </form>
                                 </div>

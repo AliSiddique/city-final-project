@@ -55,11 +55,7 @@ export default function DashboardTable({ files }: Props) {
     const labelledFiles = files.filter((file: any) => file.isLabelled == true)
     const archivedFiles = files.filter((file: any) => file.tag == "archived")
 
-    const handleDelete = async (id: any) => {
-        const res = await axios.delete(`${BASEURL}/api/delete-photo/${id}`)
-        const newFiles = files.filter((file: any) => file.id !== id)
-        console.log(newFiles)
-    }
+   
 
     const downloadCSV = () => {
         const csvContent =

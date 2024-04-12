@@ -1,3 +1,4 @@
+import { BASEURL } from "@/API/APIRoute"
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -18,4 +19,19 @@ export function formattedDate(dates: any) {
     }
 
     return new Intl.DateTimeFormat("en-US", options).format(datess)
+}
+
+
+
+export async function getBackendDetails(token:string,url:string) {
+
+    const res = await fetch(`${BASEURL}/${url}`, {
+        cache: 'no-store',
+        headers: {
+            Authorization: `Token ${token}`,
+        },
+    });
+
+    const data = await res.json();
+    return data;
 }

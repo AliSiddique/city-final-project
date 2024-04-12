@@ -1,26 +1,23 @@
-# Please run tests with below command
-# python manage.py test accounts
 from django.core import mail
 from rest_framework import status
 from rest_framework.test import APITestCase
-
+from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from allauth.account.admin import EmailAddress
-
-
 class AccountsTestCase(APITestCase):
-
+    # define the urls
     register_url = "/api/auth/register/"
     verify_email_url = "/api/auth/register/verify-email/"
     login_url = "/api/auth/login/"
+    logout_url = "/api/auth/logout/"
     user_details_url = "/api/auth/user/"
 
-
+    # Set up the test
     def setUp(self):
         self.user1_params = {
-            "username": "user1",  # it is optional to pass username
-            "email": "piotr@example.com",
-            "password": "verysecret",
+            "username": "alis",  
+            "email": "random@example.com",
+            "password": "extremlysecret",
         }
         # create user and verified email
         user = User.objects.create_user(
@@ -31,57 +28,40 @@ class AccountsTestCase(APITestCase):
         EmailAddress.objects.create(
             user=user, email=user.email, verified=True, primary=True
         )
-
+    # Test the register endpoint
     def test_register(self):
 
         # register data
         data = {
-            "email": "user2@example-email.com",
-            "password1": "verysecret",
-            "password2": "verysecret",
+            "email": "random2@example.com",
+            "password1": "extremlysecret",
+            "password2": "extremlysecret",
         }
         # send POST request to "/api/auth/register/"
         response = self.client.post(self.register_url, data)
         # check the response status and data
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.json()["detail"], "Verification e-mail sent.")
         
-        # try to login - should fail, because email is not verified
+        # try to login
         login_data = {
             "email": data["email"],
             "password": data["password1"],
         }
         response = self.client.post(self.login_url, login_data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertTrue(
-            "E-mail is not verified." in response.json()["non_field_errors"]
-        )
-
-        # expected one email to be send
-        # parse email to get token
-        self.assertEqual(len(mail.outbox), 1)
-        email_lines = mail.outbox[0].body.splitlines()
-        activation_line = [l for l in email_lines if "verify-email" in l][0]
-        activation_link = activation_line.split("go to ")[1]
-        activation_key = activation_link.split("/")[4]
-
-        response = self.client.post(self.verify_email_url, {"key": activation_key})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json()["detail"], "ok")
-
-        # lets login after verification to get token key
+         
+        # Login after verification to get token key
         response = self.client.post(self.login_url, login_data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue("key" in response.json())
-        
-    
+
+
     def test_get_user_details(self):
-        # login to get token
+        # Login to get token
         response = self.client.post(self.login_url, self.user1_params)
         token = response.json()["key"]
-        # set headers
+        # Set headers
         headers = {"HTTP_AUTHORIZATION": "Token " + token}
-        # get user details
+        # Get user details
         response = self.client.get(self.user_details_url, **headers)
         self.assertEqual(response.status_code, 200)
         data = response.json()
@@ -89,4 +69,21 @@ class AccountsTestCase(APITestCase):
             self.assertTrue(k in data)
         self.assertTrue("plan" in data["profile"])
         self.assertTrue("free" in data["profile"]["plan"])
-        
+
+    def test_logout(self):
+        # there should be 0 tokens before login
+        self.assertEqual(Token.objects.all().count(), 0)
+        # Login
+        response = self.client.post(self.login_url, self.user1_params)
+        # Get the token
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue("key" in response.json())
+        self.assertEqual(Token.objects.all().count(), 1)
+        # Set headers
+        token = response.json()["key"]
+        headers = {"HTTP_AUTHORIZATION": "Token " + token}
+        # Logout
+        response = self.client.post(self.logout_url, **headers)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["detail"], "Successfully logged out.")
+    

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     Card,
     CardContent,
@@ -30,11 +30,20 @@ import {
 import Link from 'next/link'
 import { MoreHorizontal } from 'lucide-react'
 import { formattedDate } from '@/lib/utils'
+import axios from 'axios'
+import { BASEURL } from '@/API/APIRoute'
 type Props = {
     files: any
 }
 
 export default function ImageTableRows({files}: Props) {
+    const handleDelete = async (id: string) => {
+        const res = await axios.delete(`${BASEURL}/api/delete-photo/${id}`)
+        const newFiles = files.filter((file: any) => file.id !== id)
+        window.location.reload()
+        
+    }
+  
   return (
     <div>
          <Card>
@@ -136,7 +145,7 @@ export default function ImageTableRows({files}: Props) {
                                                             <DropdownMenuItem>
                                                                 Edit
                                                             </DropdownMenuItem>
-                                                            <DropdownMenuItem>
+                                                            <DropdownMenuItem onClick={() => handleDelete(file.id)}>
                                                                 Delete
                                                             </DropdownMenuItem>
                                                         </DropdownMenuContent>
