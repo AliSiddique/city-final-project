@@ -46,32 +46,34 @@ import {
 } from "@/components/ui/alert-dialog"
 import { BASEURL } from "@/API/APIRoute"
 import ImageTableRows from "@/components/ui/ImageTableRows"
-import { downloadJSON, formattedDate } from "@/lib/utils"
+import {  downloadJSON, formattedDate } from "@/lib/utils"
 type FileData = {
-    name: string
-    image: string
-    uploaded_at: string
-    id: number
-    tag?: string
-    isLabelled?: boolean
-}
+    name: string;
+    image: string;
+    uploaded_at: string;
+    id: number;
+    tag?: string;
+    isLabelled?: boolean;
+};
 
 type Props = {
-    files: FileData[]
-}
+    files: FileData[] | []
+};
+
 
 export default function DashboardTable({ files }: Props) {
-    const draftFiles = files.filter((file: any) => file.tag == "draft")
-    const labelledFiles = files.filter((file: any) => file.isLabelled == true)
-    const archivedFiles = files.filter((file: any) => file.tag == "archived")
+    const draftFiles = files?.filter((file: any) => file.tag == "draft")
+    const labelledFiles = files?.filter((file: any) => file.isLabelled == true)
+    const archivedFiles = files?.filter((file: any) => file.tag == "archived")
+
+
 
     const downloadCSV = () => {
         const csvContent =
             "data:text/csv;charset=utf-8," +
             "Name,URL,Uploaded at,ID\n" +
-            files
-                .map(
-                    (file: any) =>
+            files?.map(
+                    (file: FileData) =>
                         `"${file.name}",${file.image},${formattedDate(file.uploaded_at)},${file.id}\n`
                 )
                 .join("\n")
@@ -84,58 +86,53 @@ export default function DashboardTable({ files }: Props) {
         link.click()
     }
 
-    const convertFilesToXML = (files: any) => {
-        let xmlData = '<?xml version="1.0" encoding="UTF-8"?>\n<files>\n'
-        files.forEach((file: any) => {
-            xmlData += `<file name="${file.name}" URL="${file.image}" UploadedAt="${formattedDate(file.uploaded_at)}" Id="${file.id}"/>\n`
-        })
-        xmlData += "</files>"
-        return xmlData
-    }
-
+    const convertFilesToXML = (files:any) => {
+        let xmlData = '<?xml version="1.0" encoding="UTF-8"?>\n<files>\n';
+        files.forEach((file:any) => {
+            xmlData += `<file name="${file.name}" URL="${file.image}" UploadedAt="${formattedDate(file.uploaded_at)}" Id="${file.id}"/>\n`;
+        });
+        xmlData += '</files>';
+        return xmlData;
+    };
+    
     const downloadXML = () => {
         // Assuming you have a function to convert 'files' into XML format
-        const xmlData = convertFilesToXML(files)
-
-        const blob = new Blob([xmlData], { type: "application/xml" })
-        const url = URL.createObjectURL(blob)
-
-        const link = document.createElement("a")
-        link.href = url
-        link.setAttribute("download", "user_list.xml")
-
-        document.body.appendChild(link)
-
-        link.click()
-
+        const xmlData = convertFilesToXML(files);
+    
+        const blob = new Blob([xmlData], { type: 'application/xml' });
+        const url = URL.createObjectURL(blob);
+    
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'user_list.xml');
+    
+        document.body.appendChild(link);
+    
+        link.click();
+    
         // Clean up
-        URL.revokeObjectURL(url)
-        document.body.removeChild(link)
-    }
+        URL.revokeObjectURL(url);
+        document.body.removeChild(link);
+    };
     const downloadText = () => {
-        const textData = files
-            .map(
-                (file: any) =>
-                    `${file.name},${file.image},${formattedDate(file.uploaded_at)},${file.id}`
-            )
-            .join("\n")
-
-        const blob = new Blob([textData], { type: "text/plain" })
-        const url = URL.createObjectURL(blob)
-
-        const link = document.createElement("a")
-        link.href = url
-        link.setAttribute("download", "user_list.txt")
-
-        document.body.appendChild(link)
-
-        link.click()
-
+        const textData = files?.map((file:FileData) => `${file.name},${file.image},${formattedDate(file.uploaded_at)},${file.id}`).join('\n');
+    
+        const blob = new Blob([textData], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+    
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'user_list.txt');
+    
+        document.body.appendChild(link);
+    
+        link.click();
+    
         // Clean up
-        URL.revokeObjectURL(url)
-        document.body.removeChild(link)
-    }
-
+        URL.revokeObjectURL(url);
+        document.body.removeChild(link);
+    };
+    
     return (
         <div>
             <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -165,38 +162,27 @@ export default function DashboardTable({ files }: Props) {
                                 </span>
                             </Button> */}
                             <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        className="h-7 gap-1"
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                 size="sm"
+                                 variant="outline"
+                                    className="h-7 gap-1"
                                     >
-                                        <File className="h-3.5 w-3.5" />
-                                        <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                                            Export
-                                        </span>
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                    <DropdownMenuLabel>
-                                        Format
-                                    </DropdownMenuLabel>
-                                    <DropdownMenuItem onClick={downloadXML}>
-                                        XML
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem
-                                        onClick={downloadJSON("images", files)}
-                                    >
-                                        JSON
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={downloadText}>
-                                        Text
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={downloadCSV}>
-                                        CSV
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
+                                   <File className="h-3.5 w-3.5" />
+                                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                                    Export
+                                </span>
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>
+                                    Format
+                                </DropdownMenuLabel>
+                                <DropdownMenuItem onClick={() => downloadJSON("images", files)}>JSON</DropdownMenuItem>
+                                <DropdownMenuItem onClick={downloadText}>Text</DropdownMenuItem>
+                                <DropdownMenuItem onClick={downloadCSV}>CSV</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                             <Button asChild size="sm" className="h-7 gap-1">
                                 <Link href="/dashboard/upload">
                                     <PlusCircle className="h-3.5 w-3.5" />
@@ -208,7 +194,7 @@ export default function DashboardTable({ files }: Props) {
                         </div>
                     </div>
                     <TabsContent value="all">
-                        <ImageTableRows files={files} />
+                       <ImageTableRows files={files} />
                     </TabsContent>
                     <TabsContent value="draft">
                         <ImageTableRows files={draftFiles} />

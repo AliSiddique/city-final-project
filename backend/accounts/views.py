@@ -6,10 +6,13 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes
 
 # Create your views here.
 # Get users photos view function to get all photos uploaded by the user
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_users_photos(request):
     try:
         user = User.objects.get(username=request.user)
