@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "next/link"
 import React from "react"
 
 type Props = {}
@@ -17,7 +17,7 @@ const sections = [
         imageSrc: "/images/assets/circuitry.svg",
         imageAlt: "Interactive Annotations Icon",
     },
-];
+]
 
 export default function FeaturesTwo({}: Props) {
     return (
@@ -25,10 +25,7 @@ export default function FeaturesTwo({}: Props) {
             <section className="lg:p-8">
                 <div className="px-8 py-12 mx-auto md:px-12 lg:px-16 xl:px-36 2xl:max-w-7xl">
                     <div className="lg:text-center max-w-2xl lg:mx-auto">
-                        <span className="text-blue-400">
-                            {" "}
-                            Features
-                        </span>
+                        <span className="text-blue-400"> Features</span>
                         <h2 className="text-3xl tracking-tight mt-6 font-light lg:text-4xl text-white">
                             Add comments{" "}
                             <span className="block text-zinc-400">
@@ -65,7 +62,7 @@ export default function FeaturesTwo({}: Props) {
                                 Export your data
                             </h2>
                             <p className="mt-4 text-sm text-zinc-300 max-w-xl mx-auto">
-                              Export all your data.
+                                Export all your data.
                             </p>
                             <div className="mt-10 flex items-center justify-center gap-x-6">
                                 <Link
@@ -76,7 +73,6 @@ export default function FeaturesTwo({}: Props) {
                                 >
                                     Get started
                                 </Link>
-                            
                             </div>
                         </div>
                     </div>

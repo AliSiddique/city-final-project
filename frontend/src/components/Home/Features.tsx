@@ -22,7 +22,7 @@ const listOne = [
         description:
             "Track user activity, analyze trends, and gain valuable insights into platform usage through comprehensive logging and analytics features.",
     },
-];
+]
 
 const listTwo = [
     {
@@ -45,7 +45,7 @@ const listTwo = [
         description:
             "Implement robust security measures to safeguard uploaded images, user data, and analytics information from unauthorized access or breaches.",
     },
-];
+]
 
 const listThree = [
     {
@@ -68,8 +68,7 @@ const listThree = [
         description:
             "Adhere to relevant data protection regulations and standards to ensure compliance and build trust among users regarding data privacy and security.",
     },
-];
-
+]
 
 export default function Features({}: Props) {
     return (
@@ -84,7 +83,8 @@ export default function Features({}: Props) {
                         </span>
                     </h2>
                     <p className="mt-4 text-base text-white max-w-md">
-                        Open comp provides a range of features to help you label and manage your visual data effectively. 
+                        Open comp provides a range of features to help you label
+                        and manage your visual data effectively.
                     </p>
                 </div>
                 <div className="flex flex-col w-full">
@@ -99,9 +99,7 @@ export default function Features({}: Props) {
                         <span className="sr-only" id="carousel-content-label">
                             Carousel
                         </span>
-                        <div className="grid grid-cols-1 lg:grid-cols-4 pb-6 border-b border-white/10">
-                         
-                        </div>
+                        <div className="grid grid-cols-1 lg:grid-cols-4 pb-6 border-b border-white/10"></div>
                         <ul
                             className="flex gap-3 overflow-x-scroll pb-24 pt-12 scrollbar-hide snap-mandatory snap-x w-full"
                             role="listbox"
@@ -149,8 +147,6 @@ export default function Features({}: Props) {
                                     ))}
                                 </ul>
                             </li>
-                
-                       
                         </ul>
                     </div>
                 </div>

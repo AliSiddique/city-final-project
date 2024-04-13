@@ -17,8 +17,12 @@ function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ")
 }
 
+interface AnalyticsData {
+    analytics: { date: string; total_amount: number }[]
+}
+
 interface Props {
-    data: any
+    data: AnalyticsData
 }
 
 export default function AnalyticsChart({ data }: Props) {
@@ -65,21 +69,18 @@ export default function AnalyticsChart({ data }: Props) {
         return weekdayName
     }
 
-    const dateString = "2024-04-07"
-    const dayOfWeek = getDayOfWeek(dateString)
-    console.log(dayOfWeek)
     const dataWithDayOfWeek = data.analytics.map((item: any) => ({
         ...item,
         dayOfWeek: item.date,
     }))
 
     return (
-        <div className="h-full w-full mx-auto max-w-7xl">
+        <div className="h-full w-full mx-auto max-w-7xl ">
             <div>
-                <h3 className="text-base font-semibold leading-6 text-gray-900">
+                <h3 className="text-base font-semibold leading-6 text-gray-900 mx-5">
                     Last 30 days
                 </h3>
-                <dl className="mt-5 grid grid-cols-1 divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow md:grid-cols-3 md:divide-x md:divide-y-0">
+                <dl className="mt-5 grid grid-cols-1 divide-y divide-gray-200 mx-5 overflow-hidden rounded-lg bg-white shadow md:grid-cols-3 md:divide-x md:divide-y-0">
                     {stats.map((item) => (
                         <div key={item.name} className="px-4 py-5 sm:p-6">
                             <dt className="text-base font-normal text-gray-900">

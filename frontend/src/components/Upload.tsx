@@ -1,13 +1,10 @@
 "use client"
-import {  FormEvent, useState } from "react"
+import { FormEvent, useState } from "react"
 import { UserCircleIcon } from "@heroicons/react/24/solid"
-
 
 import { toast } from "sonner"
 import { BASEURL } from "@/API/APIRoute"
 import { Image } from "lucide-react"
-
-
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ")

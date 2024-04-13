@@ -11,7 +11,10 @@ type Props = {
 
 export default async function page({ params }: Props) {
     const token = cookies().get("token")
-    const image = await getBackendDetails(token?.value!, `api/get-photo/${params.id}`)
+    const image = await getBackendDetails(
+        token?.value!,
+        `api/get-photo/${params.id}`
+    )
 
     return (
         <div>

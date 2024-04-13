@@ -1,11 +1,7 @@
 "use client"
 import { FormEvent, useEffect, useState } from "react"
-import {  RadioGroup } from "@headlessui/react"
-import {
-    
-    ShoppingBagIcon,
-
-} from "@heroicons/react/24/outline"
+import { RadioGroup } from "@headlessui/react"
+import { ShoppingBagIcon } from "@heroicons/react/24/outline"
 import { CircleUser, File, ListFilter, PlusCircle } from "lucide-react"
 
 import {
@@ -28,8 +24,6 @@ import { Button } from "./ui/button"
 import Link from "next/link"
 import { formattedDate } from "@/lib/utils"
 import { Badge } from "./ui/badge"
-
-
 
 const product = {
     name: "Everyday Ruck Snack",
@@ -87,20 +81,38 @@ const policies = [
     },
 ]
 
-
-
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ")
 }
+interface Comment {
+    id: number | string
+    image_id: number
+    comment: string
+    created_at: string
+    user_id: number
+}
+
+interface Photo {
+    id: number
+    image: string
+    name: string
+    uploaded_at: string
+    isLabelled: boolean
+    tag: string
+}
+
 interface Props {
     token: string
-    file: any
+    file: {
+        photo: Photo
+        labelled_image: string
+        comments: Comment[]
+    }
 }
+
 export default function SingleImage({ token, file }: Props) {
-    const [open, setOpen] = useState(false)
-    const [selectedSize, setSelectedSize] = useState(product.sizes[0])
-    const [comments, setComments] = useState(file.comments ?? [])
-    const [newComment, setNewComment] = useState("")
+    const [comments, setComments] = useState<Comment[]>(file.comments ?? [])
+    const [newComment, setNewComment] = useState<Comment | undefined>(undefined)
     const addComment = async (e: FormEvent, id: string, comment: any) => {
         e.preventDefault()
         try {
@@ -118,7 +130,6 @@ export default function SingleImage({ token, file }: Props) {
             )
             const data = res.data
             console.log(data)
-            setComments([...comments, newComment])
         } catch (error) {
             console.error(error)
         }
@@ -131,16 +142,7 @@ export default function SingleImage({ token, file }: Props) {
             image: file.photo.image,
         })
         const data = res.data
-        console.log("data " + data.results)
-        setComments([
-            ...comments,
-            {
-                id: Math.random(),
-                name: "User",
-                comment: newComment,
-                created_at: new Date(),
-            },
-        ])
+        setLabelled_image(data.labelled_image)
     }
 
     useEffect(() => {}, [comments])
@@ -169,10 +171,8 @@ export default function SingleImage({ token, file }: Props) {
                                     id="information-heading"
                                     className="sr-only"
                                 >
-                                   Information
+                                    Information
                                 </h2>
-
-                          
 
                                 <div className="mt-4 space-y-6">
                                     <p className="text-base text-gray-500">
@@ -186,7 +186,15 @@ export default function SingleImage({ token, file }: Props) {
                                         aria-hidden="true"
                                     />
                                     <div className="ml-2 text-sm text-gray-500">
-                                       {file.isLabelled ? <Badge className="bg-green-500">Labelled</Badge> : <Badge className="bg-red-500">Not Labelled</Badge>}
+                                        {file.photo.isLabelled ? (
+                                            <Badge className="bg-green-500">
+                                                Labelled
+                                            </Badge>
+                                        ) : (
+                                            <Badge className="bg-red-500">
+                                                Not Labelled
+                                            </Badge>
+                                        )}
                                     </div>
                                 </div>
                             </section>
@@ -211,8 +219,7 @@ export default function SingleImage({ token, file }: Props) {
                                 </h2>
 
                                 <form>
-                                    <div className="sm:flex sm:justify-between">
-                                        {/* Size selector */}
+                                    {/* <div className="sm:flex sm:justify-between">
                                         <RadioGroup
                                             value={selectedSize}
                                             onChange={setSelectedSize}
@@ -274,8 +281,8 @@ export default function SingleImage({ token, file }: Props) {
                                                 ))}
                                             </div>
                                         </RadioGroup>
-                                    </div>
-                                
+                                    </div> */}
+
                                     <div className="mt-10">
                                         <button
                                             type="submit"
@@ -285,7 +292,6 @@ export default function SingleImage({ token, file }: Props) {
                                             Label
                                         </button>
                                     </div>
-                                 
                                 </form>
                             </section>
                         </div>
@@ -315,7 +321,10 @@ export default function SingleImage({ token, file }: Props) {
                             <div>
                                 <div className="aspect-h-2 aspect-w-3 w-full overflow-hidden rounded-lg h-80">
                                     <img
-                                        src={file.labelled_image ?? file.image}
+                                        src={
+                                            file.labelled_image ??
+                                            file.photo.image
+                                        }
                                         alt="Drawstring top with elastic loop closure and textured interior padding."
                                         className="h-full w-full object-cover object-center"
                                     />
@@ -401,8 +410,6 @@ export default function SingleImage({ token, file }: Props) {
                             </div>
                         </div>
                     </section>
-
-              
                 </div>
 
                 <section aria-labelledby="notes-title">
@@ -447,7 +454,6 @@ export default function SingleImage({ token, file }: Props) {
                                                                 comment.created_at
                                                             )}
                                                         </span>{" "}
-                                                 
                                                     </div>
                                                 </div>
                                             </div>
@@ -466,7 +472,7 @@ export default function SingleImage({ token, file }: Props) {
                                         onSubmit={(e) =>
                                             addComment(
                                                 e,
-                                                file.photo.id,
+                                                file.photo.id.toString(),
                                                 newComment
                                             )
                                         }
@@ -478,7 +484,7 @@ export default function SingleImage({ token, file }: Props) {
                                             >
                                                 About
                                             </label>
-                                            <textarea
+                                            {/* <textarea
                                                 id="comment"
                                                 name="comment"
                                                 rows={3}
@@ -491,10 +497,9 @@ export default function SingleImage({ token, file }: Props) {
                                                 className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                                 placeholder="Add a note"
                                                 defaultValue={""}
-                                            />
+                                            /> */}
                                         </div>
                                         <div className="mt-3 flex items-center justify-between">
-                                         
                                             <Button
                                                 type="submit"
                                                 className="inline-flex items-center justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"

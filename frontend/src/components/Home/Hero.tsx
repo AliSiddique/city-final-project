@@ -21,7 +21,7 @@ export default function Hero({}: Props) {
                         </div>
                         <div className="mt-6">
                             <h1 className="text-3xl tracking-tight mt-6 font-light lg:text-4xl text-white">
-                               Open comp is the perfect tool
+                                Open comp is the perfect tool
                                 <span className="block text-zinc-400">
                                     {" "}
                                     for labelling images.
@@ -29,7 +29,10 @@ export default function Hero({}: Props) {
                             </h1>
 
                             <p className="text-white mt-6 text-balance">
-                                Open comp is a tool that allows you to label images with ease. You can upload images, label them and download the labelled images. You can also view the labelled images.
+                                Open comp is a tool that allows you to label
+                                images with ease. You can upload images, label
+                                them and download the labelled images. You can
+                                also view the labelled images.
                             </p>
                             <div className="inline-flex flex-wrap items-center mt-8">
                                 <Link

@@ -6,7 +6,10 @@ import React from "react"
 type Props = {}
 
 export default async function page({}: Props) {
-    const logs = await getBackendDetails(cookies().get("token")?.value!, "api/users-logs")
+    const logs = await getBackendDetails(
+        cookies().get("token")?.value!,
+        "api/users-logs"
+    )
     return (
         <div>
             <LogTable logs={logs} />

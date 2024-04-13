@@ -1,6 +1,5 @@
-
 "use client"
-import {  useState } from "react"
+import { useState } from "react"
 import {
     CogIcon,
     HeartIcon,
@@ -17,8 +16,6 @@ import {
     Squares2X2Icon as Squares2X2IconMini,
 } from "@heroicons/react/20/solid"
 
-
-
 const tabs = [
     { name: "Recently Viewed", href: "#", current: true },
     { name: "Recently Added", href: "#", current: false },
@@ -29,16 +26,15 @@ function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ")
 }
 interface Props {
-    files: string
+    files: string[]
 }
-export default function LabelledImages({ files }: { files: any }) {
-    const [currentFile, setCurrentFile] = useState<any>(files[0]);
+
+export default function LabelledImages({ files }: Props) {
+    const [currentFile, setCurrentFile] = useState<any>(files[0])
 
     return (
         <>
-
             <div className="flex h-full">
-
                 <div className="flex flex-1 flex-col overflow-hidden">
                     <div className="flex flex-1 items-stretch overflow-hidden">
                         <main className="flex-1 overflow-y-auto">
