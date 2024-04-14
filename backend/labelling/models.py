@@ -8,6 +8,7 @@ class Image(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True)
     isLabelled = models.BooleanField(default=False)
     tag = models.CharField(max_length=255, default="draft")
+    description = models.TextField(null=True, blank=True)
 
   
     user = models.ForeignKey("auth.User", on_delete=models.CASCADE, null=True, blank=True)
@@ -32,10 +33,7 @@ class LabelledImage(models.Model):
     labelled_image = models.ImageField(upload_to="images/",null=True, blank=True)
     label = models.CharField(max_length=255, null=True, blank=True)
     confidence = models.FloatField(null=True, blank=True)
-    x = models.FloatField(null=True, blank=True)
-    y = models.FloatField(null=True, blank=True)
-    w = models.FloatField(null=True, blank=True)
-    h = models.FloatField(null=True, blank=True)
+    isSegmented = models.BooleanField(default=False)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
 

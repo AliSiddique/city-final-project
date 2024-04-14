@@ -6,10 +6,11 @@ import { getBackendDetails } from "@/lib/utils"
 type Props = {}
 
 export default async function page({}: Props) {
+    const token = cookies().get("token")?.value
     const files = await getBackendDetails(
         cookies().get("token")?.value!,
         "api/users-photos"
     )
 
-    return <DashboardTable files={files} />
+    return <DashboardTable token={token!} files={files} />
 }

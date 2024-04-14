@@ -24,7 +24,21 @@ import { Button } from "./ui/button"
 import Link from "next/link"
 import { formattedDate } from "@/lib/utils"
 import { Badge } from "./ui/badge"
+const choices = {
+    models : [
+        {
+            name: "Segmentation",
+            description: "Segment the image",
+            url: "segment-image",
+        },
+        {
+            name: "Classification",
+            description: "Classify the image",
+            url: "label",
+        },
+    ],
 
+}
 const product = {
     name: "Everyday Ruck Snack",
     href: "#",
@@ -50,36 +64,6 @@ const product = {
         },
     ],
 }
-const policies = [
-    {
-        name: "Free delivery all year long",
-        description:
-            "Name another place that offers year long free delivery? We’ll be waiting. Order now and you’ll get delivery absolutely free.",
-        imageSrc:
-            "https://tailwindui.com/img/ecommerce/icons/icon-delivery-light.svg",
-    },
-    {
-        name: "24/7 Customer Support",
-        description:
-            "Or so we want you to believe. In reality our chat widget is powered by a naive series of if/else statements that churn out canned responses. Guaranteed to irritate.",
-        imageSrc:
-            "https://tailwindui.com/img/ecommerce/icons/icon-chat-light.svg",
-    },
-    {
-        name: "Fast Shopping Cart",
-        description:
-            "Look at the cart in that icon, there's never been a faster cart. What does this mean for the actual checkout experience? I don't know.",
-        imageSrc:
-            "https://tailwindui.com/img/ecommerce/icons/icon-fast-checkout-light.svg",
-    },
-    {
-        name: "Gift Cards",
-        description:
-            "We sell these hoping that you will buy them for your friends and they will never actually use it. Free money for us, it's great.",
-        imageSrc:
-            "https://tailwindui.com/img/ecommerce/icons/icon-gift-card-light.svg",
-    },
-]
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ")
@@ -95,7 +79,9 @@ interface Comment {
 interface Photo {
     id: number
     image: string
+    description: string
     name: string
+    isSegmented: boolean
     uploaded_at: string
     isLabelled: boolean
     tag: string
@@ -107,12 +93,15 @@ interface Props {
         photo: Photo
         labelled_image: string
         comments: Comment[]
+        segmented_image: string
     }
 }
 
 export default function SingleImage({ token, file }: Props) {
     const [comments, setComments] = useState<Comment[]>(file.comments ?? [])
     const [newComment, setNewComment] = useState<Comment | undefined>(undefined)
+    const [selectedModel, setSelectedModel] = useState(choices.models[0])
+    console.log(selectedModel)
     const addComment = async (e: FormEvent, id: string, comment: any) => {
         e.preventDefault()
         try {
@@ -137,7 +126,7 @@ export default function SingleImage({ token, file }: Props) {
     const [labelled_image, setLabelled_image] = useState(null)
     const handleLabel = async (e: any) => {
         e.preventDefault()
-        const res = await axios.post(`${BASEURL}/api/label`, {
+        const res = await axios.post(`${BASEURL}/api/${selectedModel.url}`, {
             id: file.photo.id,
             image: file.photo.image,
         })
@@ -176,7 +165,7 @@ export default function SingleImage({ token, file }: Props) {
 
                                 <div className="mt-4 space-y-6">
                                     <p className="text-base text-gray-500">
-                                        {product.description}
+                                        {file.photo.description}
                                     </p>
                                 </div>
 
@@ -219,20 +208,20 @@ export default function SingleImage({ token, file }: Props) {
                                 </h2>
 
                                 <form>
-                                    {/* <div className="sm:flex sm:justify-between">
+                                    <div className="sm:flex sm:justify-between">
                                         <RadioGroup
-                                            value={selectedSize}
-                                            onChange={setSelectedSize}
+                                            value={selectedModel}
+                                            onChange={setSelectedModel}
                                         >
                                             <RadioGroup.Label className="block text-sm font-medium text-gray-700">
                                                 Size
                                             </RadioGroup.Label>
                                             <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                                {product.sizes.map((size) => (
+                                                {choices.models.map((model:any) => (
                                                     <RadioGroup.Option
                                                         as="div"
-                                                        key={size.name}
-                                                        value={size}
+                                                        key={model.name}
+                                                        value={model}
                                                         className={({
                                                             active,
                                                         }) =>
@@ -253,14 +242,14 @@ export default function SingleImage({ token, file }: Props) {
                                                                     as="p"
                                                                     className="text-base font-medium text-gray-900"
                                                                 >
-                                                                    {size.name}
+                                                                    {model.name}
                                                                 </RadioGroup.Label>
                                                                 <RadioGroup.Description
                                                                     as="p"
                                                                     className="mt-1 text-sm text-gray-500"
                                                                 >
                                                                     {
-                                                                        size.description
+                                                                        model.description
                                                                     }
                                                                 </RadioGroup.Description>
                                                                 <div
@@ -281,7 +270,7 @@ export default function SingleImage({ token, file }: Props) {
                                                 ))}
                                             </div>
                                         </RadioGroup>
-                                    </div> */}
+                                    </div>
 
                                     <div className="mt-10">
                                         <button
@@ -330,11 +319,7 @@ export default function SingleImage({ token, file }: Props) {
                                     />
                                 </div>
                                 <p className="mt-8 text-base text-gray-500">
-                                    The 20L model has enough space for 370 candy
-                                    bars, 6 cylinders of chips, 1,220 standard
-                                    gumballs, or any combination of on-the-go
-                                    treats that your heart desires. Yes, we did
-                                    the math.
+                                   file.photo.description
                                 </p>
                                 <div className="ml-auto flex items-center gap-2">
                                     <DropdownMenu>
@@ -395,7 +380,7 @@ export default function SingleImage({ token, file }: Props) {
                             <div>
                                 <div className="aspect-h-2 aspect-w-3 w-full overflow-hidden rounded-lg">
                                     <img
-                                        src="https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-02.jpg"
+                                        src={file.segmented_image ?? file.photo.image}
                                         alt="Front zipper pouch with included key ring."
                                         className="h-full w-full object-cover object-center"
                                     />

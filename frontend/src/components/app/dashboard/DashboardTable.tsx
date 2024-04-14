@@ -57,11 +57,12 @@ type FileData = {
 };
 
 type Props = {
+    token: string;
     files: FileData[] | []
 };
 
 
-export default function DashboardTable({ files }: Props) {
+export default function DashboardTable({token, files }: Props) {
     const draftFiles = files?.filter((file: any) => file.tag == "draft")
     const labelledFiles = files?.filter((file: any) => file.isLabelled == true)
     const archivedFiles = files?.filter((file: any) => file.tag == "archived")
@@ -94,7 +95,17 @@ export default function DashboardTable({ files }: Props) {
         xmlData += '</files>';
         return xmlData;
     };
-    
+    async function labelAll() {
+       const res = await axios.post(`${BASEURL}/api/label-all`, {
+            headers: {
+                Authorization: `Token ${token}`,
+            },
+        })
+        console.log(res)
+        const data = res.data
+        window.location.reload()
+
+    }
     const downloadXML = () => {
         // Assuming you have a function to convert 'files' into XML format
         const xmlData = convertFilesToXML(files);
@@ -150,6 +161,12 @@ export default function DashboardTable({ files }: Props) {
                             </TabsTrigger>
                         </TabsList>
                         <div className="ml-auto flex items-center gap-2">
+                        <Button onClick={labelAll} size="sm" variant="outline" className="h-7 gap-1">
+                                    <ListFilter className="h-3.5 w-3.5" />
+                                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                                        Label All
+                                    </span>
+                                </Button>
                             {/* <Button
                                 onClick={() => downloadFile(FileData,files,'json')}
                                 size="sm"
@@ -173,6 +190,7 @@ export default function DashboardTable({ files }: Props) {
                                     Export
                                 </span>
                                 </Button>
+                              
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                                 <DropdownMenuLabel>
@@ -181,6 +199,8 @@ export default function DashboardTable({ files }: Props) {
                                 <DropdownMenuItem onClick={() => downloadJSON("images", files)}>JSON</DropdownMenuItem>
                                 <DropdownMenuItem onClick={downloadText}>Text</DropdownMenuItem>
                                 <DropdownMenuItem onClick={downloadCSV}>CSV</DropdownMenuItem>
+                                <DropdownMenuItem onClick={downloadXML}>XML</DropdownMenuItem>
+
                             </DropdownMenuContent>
                         </DropdownMenu>
                             <Button asChild size="sm" className="h-7 gap-1">

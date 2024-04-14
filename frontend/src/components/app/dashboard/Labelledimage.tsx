@@ -15,6 +15,8 @@ import {
     PlusIcon,
     Squares2X2Icon as Squares2X2IconMini,
 } from "@heroicons/react/20/solid"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 const tabs = [
     { name: "Recently Viewed", href: "#", current: true },
@@ -286,59 +288,19 @@ export default function LabelledImages({ files }: Props) {
                                         </button>
                                     </div>
                                 </div>
-                                <div>
-                                    <h3 className="font-medium text-gray-900">
-                                        Shared with
-                                    </h3>
-                                    <ul
-                                        role="list"
-                                        className="mt-2 divide-y divide-gray-200 border-b border-t border-gray-200"
-                                    >
-                                        {/* {currentFile.sharedWith.map((person:any) => (
-                      <li key={person.id} className="flex items-center justify-between py-3">
-                        <div className="flex items-center">
-                          <img src={person} alt="" className="h-8 w-8 rounded-full" />
-                          <p className="ml-4 text-sm font-medium text-gray-900">{person.name}</p>
-                        </div>
-                        <button
-                          type="button"
-                          className="ml-6 rounded-md bg-white text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                        >
-                          Remove<span className="sr-only"> {person.name}</span>
-                        </button>
-                      </li>
-                    ))} */}
-                                        <li className="flex items-center justify-between py-2">
-                                            <button
-                                                type="button"
-                                                className="group -ml-1 flex items-center rounded-md bg-white p-1 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                            >
-                                                <span className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-dashed border-gray-300 text-gray-400">
-                                                    <PlusIcon
-                                                        className="h-5 w-5"
-                                                        aria-hidden="true"
-                                                    />
-                                                </span>
-                                                <span className="ml-4 text-sm font-medium text-indigo-600 group-hover:text-indigo-500">
-                                                    Share
-                                                </span>
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </div>
+                              
                                 <div className="flex gap-x-3">
-                                    <button
+                                    <Button
+                                    asChild
                                         type="button"
+
                                         className="flex-1 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                     >
+                                        <Link target="_blank" href={currentFile}>
                                         Download
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="flex-1 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                                    >
-                                        Delete
-                                    </button>
+                                        </Link>
+                                    </Button>
+
                                 </div>
                             </div>
                         </aside>
