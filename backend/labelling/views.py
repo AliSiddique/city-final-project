@@ -16,6 +16,7 @@ from django.contrib.auth.models import User
 from log.models import Log
 from django.core.mail import EmailMultiAlternatives
 import uuid
+import time
 import datetime
 
 @api_view(['POST'])
@@ -88,14 +89,14 @@ def get_single_photo(request, pk):
         labelled_images = LabelledImage.objects.filter(image=photo).filter(isSegmented=False)
         labeled_photo = labelled_images.first().labelled_image.url if labelled_images else None
         comments = ImageComments.objects.filter(image=photo)
-        segmented_images = LabelledImage.objects.filter(image=photo).filter(isSegmented=True).first().labelled_image.url
+        segmented_images = LabelledImage.objects.filter(image=photo).filter(isSegmented=True).first().labelled_image.url if LabelledImage.objects.filter(image=photo).filter(isSegmented=True) else None
 
         return Response({"photo": serializer.data, "labelled_image": labeled_photo, "comments": comments.values(), "segmented_image": segmented_images})
     
     except Image.DoesNotExist:
         return Response({"error": "Photo does not exist."}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
-        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({"error": str(e)})
 
 
 
@@ -120,9 +121,14 @@ def label_image(request):
         image_bytes = response.content
         image_array = np.frombuffer(image_bytes, dtype=np.uint8)
         image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
+        # time the prediction
+        start_time = time.time()
+
         results = model.predict(source=image) 
-    
-        
+        end_time = time.time()
+
+        prediction_time = end_time - start_time
+
         for r in results:
             im_array = r.plot() 
             im = PILImage.fromarray(im_array[..., ::-1])  
@@ -135,7 +141,7 @@ def label_image(request):
         
         # Create InMemoryUploadedFile from BytesIO
         image_file = InMemoryUploadedFile(image_io, None, 'image.jpg', 'image/jpeg', image_io.tell(), None)
-        ijs =LabelledImagesAnalytics.objects.create(amount=1, user=User.objects.get(username=request.user))
+        ijs =LabelledImagesAnalytics.objects.create(amount=1, user=User.objects.get(username=request.user), prediction_time=prediction_time)
         ijs.save()
         
         ii = LabelledImage(image=image_num,labelled_image=image_file, label="test")
@@ -222,7 +228,12 @@ def segment_image(request):
         image_bytes = response.content
         image_array = np.frombuffer(image_bytes, dtype=np.uint8)
         image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
+        start_time = time.time()
+
         results = model.predict(source=image) 
+        end_time = time.time()
+
+        prediction_time = end_time - start_time
     
         
         for r in results:
@@ -240,7 +251,7 @@ def segment_image(request):
         ijs =LabelledImagesAnalytics.objects.create(amount=1, user=User.objects.get(username=request.user))
         ijs.save()
         
-        ii = LabelledImage(image=image_num,labelled_image=image_file, label="test", confidence=0.5,isSegmented=True)
+        ii = LabelledImage(image=image_num,labelled_image=image_file, label="test", confidence=0.5,isSegmented=True, prediction_time=prediction_time)
 
 
         ii.save()

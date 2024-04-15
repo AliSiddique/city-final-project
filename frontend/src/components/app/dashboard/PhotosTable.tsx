@@ -35,10 +35,18 @@ import axios from "axios"
 import Link from "next/link"
 import { formattedDate } from "@/lib/utils"
 type Props = {
-    files: any
+    files: {
+        id: number
+        name: string
+        image: string
+        uploaded_at: string
+        isLabelled:boolean
+    
+    }[]
 }
 
 export default function PhotosTable({ files }: Props) {
+    console.log(files)
     return (
         <div>
             <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -113,7 +121,6 @@ export default function PhotosTable({ files }: Props) {
                                             </TableHead>
                                             <TableHead>Name</TableHead>
                                             <TableHead>Status</TableHead>
-                                            <TableHead>Price</TableHead>
                                             <TableHead className="hidden md:table-cell">
                                                 Total Sales
                                             </TableHead>
@@ -129,7 +136,7 @@ export default function PhotosTable({ files }: Props) {
                                     </TableHeader>
                                     <TableBody>
                                         {files.map((file: any) => (
-                                            <TableRow>
+                                            <TableRow key={file.id}>
                                                 <TableCell className="hidden sm:table-cell">
                                                     <Link
                                                         href={`/dashboard/images/${file.id}`}
@@ -147,11 +154,19 @@ export default function PhotosTable({ files }: Props) {
                                                     {file.name}
                                                 </TableCell>
                                                 <TableCell>
-                                                    <Badge variant="outline">
-                                                        Not laballed
-                                                    </Badge>
+                                                {file.isLabelled ? (
+                                            <Badge
+                                                variant="secondary"
+                                                className="bg-green-500 text-white"
+                                            >
+                                                Labelled
+                                            </Badge>
+                                        ) : (
+                                            <Badge variant="destructive">
+                                                Draft
+                                            </Badge>
+                                        )}
                                                 </TableCell>
-                                                <TableCell>$499.99</TableCell>
                                                 <TableCell className="hidden md:table-cell">
                                                     25
                                                 </TableCell>

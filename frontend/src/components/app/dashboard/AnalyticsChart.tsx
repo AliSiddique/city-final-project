@@ -19,6 +19,7 @@ function classNames(...classes: string[]) {
 
 interface AnalyticsData {
     analytics: { date: string; total_amount: number }[]
+    prediction_time: string
 }
 
 interface Props {
@@ -30,20 +31,20 @@ export default function AnalyticsChart({ data }: Props) {
         {
             name: "Labelled today",
             stat: data.analytics[0].total_amount,
-            previousStat: "70,946",
-            change: "12%",
+            previousStat: data.analytics[1].total_amount,
+            change: data.analytics[0].total_amount - data.analytics[1].total_amount * 100 ,
             changeType: "increase",
         },
         {
-            name: "Avg. Open Rate",
-            stat: "58.16%",
+            name: "Labelled yesterday",
+            stat: data.analytics[1].total_amount,
             previousStat: "56.14%",
             change: "2.02%",
             changeType: "increase",
         },
         {
-            name: "Avg. Click Rate",
-            stat: "24.57%",
+            name: "Prediction time",
+            stat: data.prediction_time ?? 0,
             previousStat: "28.62%",
             change: "4.05%",
             changeType: "decrease",

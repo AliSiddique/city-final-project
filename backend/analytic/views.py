@@ -9,6 +9,8 @@ from django.contrib.auth.models import User
 from labelling.models import LabelledImagesAnalytics
 from rest_framework import status
 from log.models import Log
+from labelling.models import LabelledImage
+from django.db.models import Sum
 
 
 
@@ -20,7 +22,7 @@ def get_analytics(request):
 
         user = User.objects.get(username=request.user)
         # Calculate the date 7 days ago from today
-        seven_days_ago = timezone.now() - timedelta(days=7)
+        seven_days_ago = timezone.now() - timedelta(days=6)
         
         # Get analytics data for the last 7 days
         analytics = LabelledImagesAnalytics.objects.filter(
@@ -31,7 +33,12 @@ def get_analytics(request):
         ).values('date').annotate(
             total_amount=Count('*')
         ).order_by('-date')
+        total_prediction_times = LabelledImage.objects.filter(
+            image__user=user,
+            uploaded_at__lte=seven_days_ago
+        ).aggregate(total_prediction_time=Sum('prediction_time'))
         
+
         today = timezone.now().date()
         yesterday = today - timedelta(days=1)
         day_before_yesterday = yesterday - timedelta(days=1)
@@ -68,7 +75,7 @@ def get_analytics(request):
         analytics_data = [{'date': date, 'total_amount': total_amount} for date, total_amount in analytics_dict.items()]
         Log.objects.create(log="image.analytics",url="/api/analytics",method="GET", user=user)
 
-        return Response({"analytics": analytics_data})
+        return Response({"analytics": analytics_data,"prediction_time":total_prediction_times['total_prediction_time']}, status=status.HTTP_200_OK)
     except User.DoesNotExist:
         return Response({"error": "User does not exist."}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:

@@ -201,7 +201,7 @@ export default function Upload({ token }: { token: string }) {
                                     Image
                                 </label>
                                 <div className="mt-2 flex items-center gap-x-3">
-                                    {image ? (
+                                    {/* {image ? (
                                         <img
                                             src={URL.createObjectURL(image && image[0])}
                                             alt="profile"
@@ -214,7 +214,7 @@ export default function Upload({ token }: { token: string }) {
                                             aria-hidden="true"
                                         />
                                     
-                                    )}
+                                    )} */}
                                   
                                     <input
                                          type="file"

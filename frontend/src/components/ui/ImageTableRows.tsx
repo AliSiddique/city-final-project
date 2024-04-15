@@ -34,6 +34,7 @@ import axios from "axios"
 import { BASEURL } from "@/API/APIRoute"
 type Props = {
     files: any
+    
 }
 
 export default function ImageTableRows({ files }: Props) {
@@ -72,7 +73,7 @@ export default function ImageTableRows({ files }: Props) {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {files.map((file: any) => (
+                            {files.map((file:any ) => (
                                 <TableRow>
                                     <TableCell className="hidden sm:table-cell">
                                         <Link

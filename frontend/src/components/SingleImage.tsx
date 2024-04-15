@@ -79,8 +79,8 @@ interface Comment {
 interface Photo {
     id: number
     image: string
-    description: string
-    name: string
+    description: string | null
+    name: string | null
     isSegmented: boolean
     uploaded_at: string
     isLabelled: boolean
@@ -91,17 +91,18 @@ interface Props {
     token: string
     file: {
         photo: Photo
-        labelled_image: string
+        labelled_image: string | null
         comments: Comment[]
         segmented_image: string
     }
 }
 
-export default function SingleImage({ token, file }: Props) {
+export default function SingleImage({ token, file }: any) {
+    console.log(file)
     const [comments, setComments] = useState<Comment[]>(file.comments ?? [])
     const [newComment, setNewComment] = useState<Comment | undefined>(undefined)
     const [selectedModel, setSelectedModel] = useState(choices.models[0])
-    console.log(selectedModel)
+    console.log(file)
     const addComment = async (e: FormEvent, id: string, comment: any) => {
         e.preventDefault()
         try {
@@ -148,7 +149,7 @@ export default function SingleImage({ token, file }: Props) {
                         <div className="lg:max-w-lg lg:self-end">
                             <div className="mt-4">
                                 <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                                    {file.photo.name}
+                                    {/* {file.photo.name ?? product.name} */}
                                 </h1>
                             </div>
 
@@ -165,7 +166,7 @@ export default function SingleImage({ token, file }: Props) {
 
                                 <div className="mt-4 space-y-6">
                                     <p className="text-base text-gray-500">
-                                        {file.photo.description}
+                                        {file?.photo?.description ?? ""}
                                     </p>
                                 </div>
 
@@ -175,7 +176,7 @@ export default function SingleImage({ token, file }: Props) {
                                         aria-hidden="true"
                                     />
                                     <div className="ml-2 text-sm text-gray-500">
-                                        {file.photo.isLabelled ? (
+                                        {file?.photo?.isLabelled ? (
                                             <Badge className="bg-green-500">
                                                 Labelled
                                             </Badge>
@@ -193,7 +194,7 @@ export default function SingleImage({ token, file }: Props) {
                         <div className="mt-10 lg:col-start-2 lg:row-span-2 lg:mt-0 lg:self-center">
                             <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg">
                                 <img
-                                    src={file.photo.image}
+                                    src={file?.photo?.image}
                                     alt={product.imageAlt}
                                     className="h-96 w-full object-contain object-center"
                                 />
@@ -311,8 +312,8 @@ export default function SingleImage({ token, file }: Props) {
                                 <div className="aspect-h-2 aspect-w-3 w-full overflow-hidden rounded-lg h-80">
                                     <img
                                         src={
-                                            file.labelled_image ??
-                                            file.photo.image
+                                            file?.labelled_image ??
+                                            file?.photo?.image
                                         }
                                         alt="Drawstring top with elastic loop closure and textured interior padding."
                                         className="h-full w-full object-cover object-center"
@@ -359,8 +360,8 @@ export default function SingleImage({ token, file }: Props) {
                                         <Link
                                             target="_blank"
                                             href={
-                                                file.labelled_image ??
-                                                file.photo.image
+                                                file?.labelled_image ??
+                                                file?.photo?.image
                                             }
                                         >
                                             <File className="h-3.5 w-3.5" />
@@ -380,7 +381,7 @@ export default function SingleImage({ token, file }: Props) {
                             <div>
                                 <div className="aspect-h-2 aspect-w-3 w-full overflow-hidden rounded-lg">
                                     <img
-                                        src={file.segmented_image ?? file.photo.image}
+                                        src={file?.segmented_image ?? file?.photo?.image}
                                         alt="Front zipper pouch with included key ring."
                                         className="h-full w-full object-cover object-center"
                                     />

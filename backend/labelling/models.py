@@ -35,6 +35,7 @@ class LabelledImage(models.Model):
     confidence = models.FloatField(null=True, blank=True)
     isSegmented = models.BooleanField(default=False)
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    prediction_time = models.FloatField(null=True, blank=True)
 
 
 
