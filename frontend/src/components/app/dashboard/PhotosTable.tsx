@@ -40,8 +40,7 @@ type Props = {
         name: string
         image: string
         uploaded_at: string
-        isLabelled:boolean
-    
+        isLabelled: boolean
     }[]
 }
 
@@ -154,18 +153,18 @@ export default function PhotosTable({ files }: Props) {
                                                     {file.name}
                                                 </TableCell>
                                                 <TableCell>
-                                                {file.isLabelled ? (
-                                            <Badge
-                                                variant="secondary"
-                                                className="bg-green-500 text-white"
-                                            >
-                                                Labelled
-                                            </Badge>
-                                        ) : (
-                                            <Badge variant="destructive">
-                                                Draft
-                                            </Badge>
-                                        )}
+                                                    {file.isLabelled ? (
+                                                        <Badge
+                                                            variant="secondary"
+                                                            className="bg-green-500 text-white"
+                                                        >
+                                                            Labelled
+                                                        </Badge>
+                                                    ) : (
+                                                        <Badge variant="destructive">
+                                                            Draft
+                                                        </Badge>
+                                                    )}
                                                 </TableCell>
                                                 <TableCell className="hidden md:table-cell">
                                                     25

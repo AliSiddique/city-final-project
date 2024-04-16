@@ -91,23 +91,28 @@ export default function LogTable({ logs }: { logs: Logs[] }) {
         link.click()
     }
     const downloadText = () => {
-        const textData = logs?.map((log:Logs) => `${log.id},${log.log},${formattedDate(log.created_at)},${log.url},${log.method}`).join('\n');
-    
-        const blob = new Blob([textData], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-    
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'user_list.txt');
-    
-        document.body.appendChild(link);
-    
-        link.click();
-    
+        const textData = logs
+            ?.map(
+                (log: Logs) =>
+                    `${log.id},${log.log},${formattedDate(log.created_at)},${log.url},${log.method}`
+            )
+            .join("\n")
+
+        const blob = new Blob([textData], { type: "text/plain" })
+        const url = URL.createObjectURL(blob)
+
+        const link = document.createElement("a")
+        link.href = url
+        link.setAttribute("download", "user_list.txt")
+
+        document.body.appendChild(link)
+
+        link.click()
+
         // Clean up
-        URL.revokeObjectURL(url);
-        document.body.removeChild(link);
-    };
+        URL.revokeObjectURL(url)
+        document.body.removeChild(link)
+    }
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">

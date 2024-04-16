@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useState } from "react"
 import {
     Card,
     CardContent,
@@ -8,6 +8,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
 import {
     Table,
     TableBody,
@@ -32,16 +33,32 @@ import { MoreHorizontal } from "lucide-react"
 import { formattedDate } from "@/lib/utils"
 import axios from "axios"
 import { BASEURL } from "@/API/APIRoute"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 type Props = {
-    files: any
-    
+    files: FileData[]
+}
+interface FileData {
+    name: string
+    image: string
+    uploaded_at: string
+    id: string
+    tag?: string
+    isLabelled?: boolean
 }
 
 export default function ImageTableRows({ files }: Props) {
+    const [loading, setLoading] = useState(false)
+    const router = useRouter()
     const handleDelete = async (id: string) => {
-        const res = await axios.delete(`${BASEURL}/api/delete-photo/${id}`)
-        const newFiles = files.filter((file: any) => file.id !== id)
-        window.location.reload()
+        try {
+            const res = await axios.delete(`${BASEURL}/api/delete-photo/${id}`)
+            toast.success("Image deleted successfully")
+            files = files.filter((file: FileData) => file.id !== id)
+            router.refresh()
+        } catch (error) {
+            toast.error("Error deleting image")
+        }
     }
 
     return (
@@ -61,9 +78,7 @@ export default function ImageTableRows({ files }: Props) {
                                 <TableHead>Name</TableHead>
                                 <TableHead>Status</TableHead>
                                 <TableHead>Tag</TableHead>
-                                <TableHead className="hidden md:table-cell">
-                                    Amount of labels
-                                </TableHead>
+
                                 <TableHead className="hidden md:table-cell">
                                     Created at
                                 </TableHead>
@@ -73,7 +88,7 @@ export default function ImageTableRows({ files }: Props) {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {files.map((file:any ) => (
+                            {files.map((file: FileData) => (
                                 <TableRow>
                                     <TableCell className="hidden sm:table-cell">
                                         <Link
@@ -89,10 +104,25 @@ export default function ImageTableRows({ files }: Props) {
                                         </Link>
                                     </TableCell>
                                     <TableCell className="font-medium">
-                                        {file.name}
+                                        {file.name.charAt(0).toUpperCase() +
+                                            file.name.slice(1)}
                                     </TableCell>
                                     <TableCell>
                                         {file.isLabelled ? (
+                                            <Badge
+                                                variant="secondary"
+                                                className="bg-green-500 text-white"
+                                            >
+                                                Labelled
+                                            </Badge>
+                                        ) : (
+                                            <Badge variant="destructive">
+                                                Not Labelled
+                                            </Badge>
+                                        )}
+                                    </TableCell>
+                                    <TableCell>
+                                        {file.tag != "draft" ? (
                                             <Badge
                                                 variant="secondary"
                                                 className="bg-green-500 text-white"
@@ -105,10 +135,7 @@ export default function ImageTableRows({ files }: Props) {
                                             </Badge>
                                         )}
                                     </TableCell>
-                                    <TableCell>{file.tag}</TableCell>
-                                    <TableCell className="hidden md:table-cell">
-                                        25
-                                    </TableCell>
+
                                     <TableCell className="hidden md:table-cell">
                                         {formattedDate(file.uploaded_at)}
                                     </TableCell>
@@ -130,9 +157,6 @@ export default function ImageTableRows({ files }: Props) {
                                                 <DropdownMenuLabel>
                                                     Actions
                                                 </DropdownMenuLabel>
-                                                <DropdownMenuItem>
-                                                    Edit
-                                                </DropdownMenuItem>
                                                 <DropdownMenuItem
                                                     onClick={() =>
                                                         handleDelete(file.id)
@@ -150,8 +174,7 @@ export default function ImageTableRows({ files }: Props) {
                 </CardContent>
                 <CardFooter>
                     <div className="text-xs text-muted-foreground">
-                        Showing <strong>1-10</strong> of{" "}
-                        <strong>{files.length}</strong> products
+                        <strong>{files.length}</strong> Images
                     </div>
                 </CardFooter>
             </Card>

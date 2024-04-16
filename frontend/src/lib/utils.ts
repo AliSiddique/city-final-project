@@ -15,7 +15,7 @@ export function formattedDate(dates: any) {
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
-        timeZone: "UTC", 
+        timeZone: "UTC",
     }
 
     return new Intl.DateTimeFormat("en-US", options).format(datess)

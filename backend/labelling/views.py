@@ -279,6 +279,7 @@ def segment_image(request):
 @api_view(['POST'])
 def label_all(request):
     try:
+        user=User.objects.get(username=request.user)
         images = Image.objects.filter(isLabelled=False)
         for image in images:
             model = YOLO("../yolov8n.pt")
@@ -297,7 +298,6 @@ def label_all(request):
             im.save(image_io, format='JPEG')
             image_num = Image.objects.get(pk=image.id)
             log_url = "/api/label"
-            user=User.objects.get(username=request.user)
             Log.objects.create(log="image.labelled.success",url=log_url,method="POST", user=user)
             
             # Create InMemoryUploadedFile from BytesIO
@@ -309,23 +309,20 @@ def label_all(request):
 
 
             ii.save()
-            subject, from_email, to = "hello", "alisiddique10@hotmail.com", user.email
-            text_content = "This is an important message."
-            html_content = f"<div> <img src={ii.labelled_image.url} /> is an <strong>important</strong> message.</div>"
-            msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-            msg.attach_alternative(html_content, "text/html")
-            msg.send()
             image_num.isLabelled = True
             image_num.tag = "labelled"
             image_num.save()
             labelled_image = ii.labelled_image.url
-        subject, from_email, to = "hello", "alisiddique10@hotmail.com", user.email
-        text_content = "This is an important message."
-        html_content = f"All images have been labelled successfully."
+
+        subject, from_email, to = "Images Labelled", "alisiddique10@hotmail.com", user.email
+        text_content = "Hi there, all images have been labelled successfully."
+        html_content = f"<div> All images have been labelled successfully.</div>"
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
         msg.attach_alternative(html_content, "text/html")
         msg.send()
         return JsonResponse({"results": labelled_image})
     except Image.DoesNotExist:
         return Response({"error": "Image does not exist."}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     

@@ -288,19 +288,20 @@ export default function LabelledImages({ files }: Props) {
                                         </button>
                                     </div>
                                 </div>
-                              
+
                                 <div className="flex gap-x-3">
                                     <Button
-                                    asChild
+                                        asChild
                                         type="button"
-
                                         className="flex-1 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                     >
-                                        <Link target="_blank" href={currentFile}>
-                                        Download
+                                        <Link
+                                            target="_blank"
+                                            href={currentFile}
+                                        >
+                                            Download
                                         </Link>
                                     </Button>
-
                                 </div>
                             </div>
                         </aside>

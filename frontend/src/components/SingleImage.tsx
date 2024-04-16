@@ -25,7 +25,7 @@ import Link from "next/link"
 import { formattedDate } from "@/lib/utils"
 import { Badge } from "./ui/badge"
 const choices = {
-    models : [
+    models: [
         {
             name: "Segmentation",
             description: "Segment the image",
@@ -37,7 +37,6 @@ const choices = {
             url: "label",
         },
     ],
-
 }
 const product = {
     name: "Everyday Ruck Snack",
@@ -149,7 +148,7 @@ export default function SingleImage({ token, file }: any) {
                         <div className="lg:max-w-lg lg:self-end">
                             <div className="mt-4">
                                 <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                                    {/* {file.photo.name ?? product.name} */}
+                                    {file?.photo?.name}
                                 </h1>
                             </div>
 
@@ -192,11 +191,11 @@ export default function SingleImage({ token, file }: any) {
 
                         {/* Product image */}
                         <div className="mt-10 lg:col-start-2 lg:row-span-2 lg:mt-0 lg:self-center">
-                            <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg">
+                            <div className="h-96 overflow-hidden rounded-lg">
                                 <img
                                     src={file?.photo?.image}
                                     alt={product.imageAlt}
-                                    className="h-96 w-full object-contain object-center"
+                                    className="h-96 w-full object-cover "
                                 />
                             </div>
                         </div>
@@ -205,7 +204,7 @@ export default function SingleImage({ token, file }: any) {
                         <div className="mt-10 lg:col-start-1 lg:row-start-2 lg:max-w-lg lg:self-start">
                             <section aria-labelledby="options-heading">
                                 <h2 id="options-heading" className="sr-only">
-                                    Product options
+                                    Model Selection
                                 </h2>
 
                                 <form>
@@ -215,60 +214,64 @@ export default function SingleImage({ token, file }: any) {
                                             onChange={setSelectedModel}
                                         >
                                             <RadioGroup.Label className="block text-sm font-medium text-gray-700">
-                                                Size
+                                                Choose a model
                                             </RadioGroup.Label>
                                             <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                                {choices.models.map((model:any) => (
-                                                    <RadioGroup.Option
-                                                        as="div"
-                                                        key={model.name}
-                                                        value={model}
-                                                        className={({
-                                                            active,
-                                                        }) =>
-                                                            classNames(
-                                                                active
-                                                                    ? "ring-2 ring-indigo-500"
-                                                                    : "",
-                                                                "relative block cursor-pointer rounded-lg border border-gray-300 p-4 focus:outline-none"
-                                                            )
-                                                        }
-                                                    >
-                                                        {({
-                                                            active,
-                                                            checked,
-                                                        }) => (
-                                                            <>
-                                                                <RadioGroup.Label
-                                                                    as="p"
-                                                                    className="text-base font-medium text-gray-900"
-                                                                >
-                                                                    {model.name}
-                                                                </RadioGroup.Label>
-                                                                <RadioGroup.Description
-                                                                    as="p"
-                                                                    className="mt-1 text-sm text-gray-500"
-                                                                >
-                                                                    {
-                                                                        model.description
-                                                                    }
-                                                                </RadioGroup.Description>
-                                                                <div
-                                                                    className={classNames(
-                                                                        active
-                                                                            ? "border"
-                                                                            : "border-2",
-                                                                        checked
-                                                                            ? "border-indigo-500"
-                                                                            : "border-transparent",
-                                                                        "pointer-events-none absolute -inset-px rounded-lg"
-                                                                    )}
-                                                                    aria-hidden="true"
-                                                                />
-                                                            </>
-                                                        )}
-                                                    </RadioGroup.Option>
-                                                ))}
+                                                {choices.models.map(
+                                                    (model: any) => (
+                                                        <RadioGroup.Option
+                                                            as="div"
+                                                            key={model.name}
+                                                            value={model}
+                                                            className={({
+                                                                active,
+                                                            }) =>
+                                                                classNames(
+                                                                    active
+                                                                        ? "ring-2 ring-indigo-500"
+                                                                        : "",
+                                                                    "relative block cursor-pointer rounded-lg border border-gray-300 p-4 focus:outline-none"
+                                                                )
+                                                            }
+                                                        >
+                                                            {({
+                                                                active,
+                                                                checked,
+                                                            }) => (
+                                                                <>
+                                                                    <RadioGroup.Label
+                                                                        as="p"
+                                                                        className="text-base font-medium text-gray-900"
+                                                                    >
+                                                                        {
+                                                                            model.name
+                                                                        }
+                                                                    </RadioGroup.Label>
+                                                                    <RadioGroup.Description
+                                                                        as="p"
+                                                                        className="mt-1 text-sm text-gray-500"
+                                                                    >
+                                                                        {
+                                                                            model.description
+                                                                        }
+                                                                    </RadioGroup.Description>
+                                                                    <div
+                                                                        className={classNames(
+                                                                            active
+                                                                                ? "border"
+                                                                                : "border-2",
+                                                                            checked
+                                                                                ? "border-indigo-500"
+                                                                                : "border-transparent",
+                                                                            "pointer-events-none absolute -inset-px rounded-lg"
+                                                                        )}
+                                                                        aria-hidden="true"
+                                                                    />
+                                                                </>
+                                                            )}
+                                                        </RadioGroup.Option>
+                                                    )
+                                                )}
                                             </div>
                                         </RadioGroup>
                                     </div>
@@ -297,102 +300,85 @@ export default function SingleImage({ token, file }: any) {
                                 id="details-heading"
                                 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
                             >
-                                The Fine Details
+                              Your labelled images.
                             </h2>
                             <p className="mt-3 max-w-3xl text-lg text-gray-600">
-                                Our patented padded snack sleeve construction
-                                protects your favorite treats from getting
-                                smooshed during all-day adventures, long shifts
-                                at work, and tough travel schedules.
+                                Have a look at your labelled images.
                             </p>
                         </div>
 
                         <div className="mt-16 grid grid-cols-1 gap-y-16 lg:grid-cols-2 lg:gap-x-8">
                             <div>
-                                <div className="aspect-h-2 aspect-w-3 w-full overflow-hidden rounded-lg h-80">
-                                    <img
+                            <div className="aspect-h-2 aspect-w-3 w-full overflow-hidden rounded-lg h-80">
+                                    {/* <img
                                         src={
                                             file?.labelled_image ??
                                             file?.photo?.image
                                         }
                                         alt="Drawstring top with elastic loop closure and textured interior padding."
                                         className="h-full w-full object-cover object-center"
-                                    />
-                                </div>
-                                <p className="mt-8 text-base text-gray-500">
-                                   file.photo.description
-                                </p>
-                                <div className="ml-auto flex items-center gap-2">
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                className="h-7 gap-1"
-                                            >
-                                                <ListFilter className="h-3.5 w-3.5" />
-                                                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                                                    Filter
-                                                </span>
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuLabel>
-                                                Filter by
-                                            </DropdownMenuLabel>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuCheckboxItem checked>
-                                                Active
-                                            </DropdownMenuCheckboxItem>
-                                            <DropdownMenuCheckboxItem>
-                                                Draft
-                                            </DropdownMenuCheckboxItem>
-                                            <DropdownMenuCheckboxItem>
-                                                Archived
-                                            </DropdownMenuCheckboxItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        className="h-7 gap-1"
-                                    >
-                                        <Link
-                                            target="_blank"
-                                            href={
+                                    /> */}
+                                    <div className="overflow-hidden  aspect-video bg-red-400 cursor-pointer rounded-xl relative group">
+                                        <div className="rounded-xl z-50 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out cursor-pointer absolute from-black/80 to-transparent bg-gradient-to-t inset-x-0 -bottom-2 pt-30 text-white flex items-end">
+                                            <div>
+                                                <div className="transform-gpu  p-4 space-y-3 text-xl group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 pb-10 transform transition duration-300 ease-in-out">
+                                                    <div className="font-bold">
+                                                       Segmented Image
+                                                    </div>
+
+                                                    <div className="opacity-60 text-sm ">
+                                                      This is the segmented image based on your input image.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <img
+                                            alt=""
+                                            className="object-cover w-full aspect-square group-hover:scale-110 transition duration-300 ease-in-out"
+                                            src={
                                                 file?.labelled_image ??
                                                 file?.photo?.image
                                             }
-                                        >
-                                            <File className="h-3.5 w-3.5" />
-                                            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                                                Export
-                                            </span>
-                                        </Link>
-                                    </Button>
-                                    <Button size="sm" className="h-7 gap-1">
-                                        <PlusCircle className="h-3.5 w-3.5" />
-                                        <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                                            Add Product
-                                        </span>
-                                    </Button>
+                                        />
+                                    </div>
                                 </div>
+                              
                             </div>
                             <div>
-                                <div className="aspect-h-2 aspect-w-3 w-full overflow-hidden rounded-lg">
-                                    <img
-                                        src={file?.segmented_image ?? file?.photo?.image}
-                                        alt="Front zipper pouch with included key ring."
+                                <div className="aspect-h-2 aspect-w-3 w-full overflow-hidden rounded-lg h-80">
+                                    {/* <img
+                                        src={
+                                            file?.labelled_image ??
+                                            file?.photo?.image
+                                        }
+                                        alt="Drawstring top with elastic loop closure and textured interior padding."
                                         className="h-full w-full object-cover object-center"
-                                    />
+                                    /> */}
+                                    <div className="overflow-hidden  aspect-video bg-red-400 cursor-pointer rounded-xl relative group">
+                                        <div className="rounded-xl z-50 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out cursor-pointer absolute from-black/80 to-transparent bg-gradient-to-t inset-x-0 -bottom-2 pt-30 text-white flex items-end">
+                                            <div>
+                                                <div className="transform-gpu  p-4 space-y-3 text-xl group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 pb-10 transform transition duration-300 ease-in-out">
+                                                    <div className="font-bold">
+                                                       Segmented Image
+                                                    </div>
+
+                                                    <div className="opacity-60 text-sm ">
+                                                      This is the segmented image based on your input image.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <img
+                                            alt=""
+                                            className="object-cover w-full aspect-square group-hover:scale-110 transition duration-300 ease-in-out"
+                                            src={
+                                                file?.labelled_image ??
+                                                file?.photo?.image
+                                            }
+                                        />
+                                    </div>
                                 </div>
-                                <p className="mt-8 text-base text-gray-500">
-                                    Up your snack organization game with
-                                    multiple compartment options. The
-                                    quick-access stash pouch is ready for even
-                                    the most unexpected snack attacks and
-                                    sharing needs.
-                                </p>
+                             
                             </div>
                         </div>
                     </section>
@@ -468,22 +454,22 @@ export default function SingleImage({ token, file }: any) {
                                                 htmlFor="comment"
                                                 className="sr-only"
                                             >
-                                                About
+                                                Comment
                                             </label>
-                                            {/* <textarea
+                                            <textarea
                                                 id="comment"
                                                 name="comment"
                                                 rows={3}
-                                                value={newComment}
-                                                onChange={(e) =>
-                                                    setNewComment(
-                                                        e.target.value
-                                                    )
-                                                }
+                                                // value={newComment}
+                                                // onChange={(e) =>
+                                                //     setNewComment(
+                                                //         e.target.value
+                                                //     )
+                                                // }
                                                 className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                                 placeholder="Add a note"
                                                 defaultValue={""}
-                                            /> */}
+                                            />
                                         </div>
                                         <div className="mt-3 flex items-center justify-between">
                                             <Button

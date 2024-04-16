@@ -1,8 +1,8 @@
-import { BASEURL } from '@/API/APIRoute';
-import { test, expect } from '@playwright/test'
-import axios from 'axios';
- 
-test('Get photos', async ({ page }) => {
+import { BASEURL } from "@/API/APIRoute"
+import { test, expect } from "@playwright/test"
+import axios from "axios"
+
+test("Get photos", async ({ page }) => {
     // Start from the index page (the baseURL is set via the webServer in the playwright.config.ts)
     const res = await fetch(`${BASEURL}/api/users-photos`, {
         cache: "no-store",

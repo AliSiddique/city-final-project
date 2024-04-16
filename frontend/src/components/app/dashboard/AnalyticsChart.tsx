@@ -32,7 +32,9 @@ export default function AnalyticsChart({ data }: Props) {
             name: "Labelled today",
             stat: data.analytics[0].total_amount,
             previousStat: data.analytics[1].total_amount,
-            change: data.analytics[0].total_amount - data.analytics[1].total_amount * 100 ,
+            change:
+                data.analytics[0].total_amount -
+                data.analytics[1].total_amount * 100,
             changeType: "increase",
         },
         {
