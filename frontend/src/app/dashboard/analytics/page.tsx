@@ -9,7 +9,6 @@ export default async function page({}: Props) {
         cookies().get("token")?.value!,
         "api/analytics"
     )
-    console.log(analytics)
     return (
         <div>
             <AnalyticsChart data={analytics} />

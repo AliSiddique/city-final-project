@@ -1,5 +1,7 @@
 import DashboardLayout from "@/components/Layout/DashboardLayout"
 import type { Metadata } from "next"
+import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -11,5 +13,9 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode
 }>) {
+    const token = cookies().get("token")
+    if (!token) {
+        redirect("/user/login")
+    }
     return <DashboardLayout>{children}</DashboardLayout>
 }

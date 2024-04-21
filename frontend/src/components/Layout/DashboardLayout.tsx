@@ -1,15 +1,11 @@
 "use client"
-import Image from "next/image"
 import Link from "next/link"
-import React, { Suspense, useEffect, useState } from "react"
+import React, { Suspense, useState } from "react"
 import {
     CircleUser,
-    File,
     Home,
     Images,
     LineChart,
-    ListFilter,
-    MoreHorizontal,
     Package,
     Package2,
     PanelLeft,
@@ -20,21 +16,9 @@ import {
     ShoppingCart,
     Users2,
 } from "lucide-react"
-
-import { Badge } from "@/components/ui/badge"
-
 import { Button } from "@/components/ui/button"
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
-import {
     DropdownMenu,
-    DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
@@ -43,15 +27,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
     Tooltip,
     TooltipContent,
@@ -66,8 +41,9 @@ interface Props {
     children: React.ReactNode
 }
 export default function Dashboard({ children }: Props) {
-    const [search, setSearch] = useState("")
+    const [search, setSearch] = useState<string>("")
     const dispatch = useAppDispatch()
+    // Search on enter
     React.useEffect(() => {
         const down = (e: KeyboardEvent) => {
             if (e.key === "Enter") {
@@ -91,7 +67,11 @@ export default function Dashboard({ children }: Props) {
                                 href="#"
                                 className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
                             >
-                                <Package2 className="h-4 w-4 transition-all group-hover:scale-110" />
+                                <img
+                                    src="/opencomp-logo.png"
+                                    alt="logo"
+                                    className="h-4 w-4 transition-all group-hover:scale-110 rounded-full"
+                                />
                                 <span className="sr-only">Open comp</span>
                             </Link>
                             <Tooltip>
@@ -155,24 +135,6 @@ export default function Dashboard({ children }: Props) {
                                 </TooltipTrigger>
                                 <TooltipContent side="right">
                                     Logs
-                                </TooltipContent>
-                            </Tooltip>
-                        </nav>
-                        <nav className="mt-auto flex flex-col items-center gap-4 px-2 py-4">
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Link
-                                        href="#"
-                                        className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-                                    >
-                                        <Settings className="h-5 w-5" />
-                                        <span className="sr-only">
-                                            Settings
-                                        </span>
-                                    </Link>
-                                </TooltipTrigger>
-                                <TooltipContent side="right">
-                                    Settings
                                 </TooltipContent>
                             </Tooltip>
                         </nav>

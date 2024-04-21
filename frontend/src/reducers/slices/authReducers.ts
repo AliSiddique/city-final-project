@@ -1,6 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import axios, { AxiosError } from "axios"
-import { TypedDispatch } from "../../store/store"
 import { RootState } from "../../store/store"
 import { setAxiosAuthToken } from "../utils"
 import { hasCookie, getCookie, setCookie, deleteCookie } from "cookies-next"
@@ -17,7 +15,7 @@ export type UserType = {
     email: string
     profile: ProfileType
 }
-// loading token from localStorage
+// loading token from Cookies
 let initToken = null
 if (hasCookie("token")) {
     initToken = getCookie("token")
@@ -25,8 +23,7 @@ if (hasCookie("token")) {
 }
 
 const initialState = {
-    token: initToken as string | null, // add token variable
-    verifyEmailStatus: "unknown", // new variable in the store
+    token: initToken as string | null, 
     loggedIn: false as boolean | null,
     user: {
         pk: 0,
@@ -39,14 +36,11 @@ const initialState = {
         },
     } as UserType,
 }
-
+// Auth Slice
 const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        setVerifyEmailStatus(state, action: PayloadAction<string>) {
-            state.verifyEmailStatus = action.payload
-        },
         setToken(state, action: PayloadAction<string | null>) {
             state.token = action.payload
             setAxiosAuthToken(state.token)
@@ -67,12 +61,9 @@ const authSlice = createSlice({
 export default authSlice.reducer
 export const {
     setToken,
-    setVerifyEmailStatus, // export new function
-    setUserInfo, // export new function
+    setUserInfo, 
 } = authSlice.actions
 
 export const getUserInfo = (state: RootState) => state.auth.user
-export const getVerifyEmailStatus = (state: RootState) =>
-    state.auth.verifyEmailStatus
 export const getToken = (state: RootState) => state.auth.token
 export const getLoggedIn = (state: RootState) => state.auth.loggedIn

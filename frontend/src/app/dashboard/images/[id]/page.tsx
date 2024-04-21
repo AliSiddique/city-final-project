@@ -15,7 +15,6 @@ export default async function page({ params }: Props) {
         token?.value!,
         `api/get-photo/${params.id}`
     )
-    console.log(image)
 
     return (
         <div>

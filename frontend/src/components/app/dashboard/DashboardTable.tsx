@@ -1,49 +1,17 @@
 "use client"
 import React from "react"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
-import {
     DropdownMenu,
-    DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import Image from "next/image"
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { File, ListFilter, PlusCircle } from "lucide-react"
-import { MoreHorizontal } from "lucide-react"
 import axios from "axios"
 import Link from "next/link"
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
 import { BASEURL } from "@/API/APIRoute"
 import ImageTableRows from "@/components/ui/ImageTableRows"
 import { downloadJSON, formattedDate } from "@/lib/utils"
@@ -120,21 +88,14 @@ export default function DashboardTable({ token, files }: Props) {
         }
     }
     const downloadXML = () => {
-        // Assuming you have a function to convert 'files' into XML format
         const xmlData = convertFilesToXML(files)
-
         const blob = new Blob([xmlData], { type: "application/xml" })
         const url = URL.createObjectURL(blob)
-
         const link = document.createElement("a")
         link.href = url
         link.setAttribute("download", "user_list.xml")
-
         document.body.appendChild(link)
-
         link.click()
-
-        // Clean up
         URL.revokeObjectURL(url)
         document.body.removeChild(link)
     }
@@ -148,16 +109,11 @@ export default function DashboardTable({ token, files }: Props) {
 
         const blob = new Blob([textData], { type: "text/plain" })
         const url = URL.createObjectURL(blob)
-
         const link = document.createElement("a")
         link.href = url
         link.setAttribute("download", "user_list.txt")
-
         document.body.appendChild(link)
-
         link.click()
-
-        // Clean up
         URL.revokeObjectURL(url)
         document.body.removeChild(link)
     }

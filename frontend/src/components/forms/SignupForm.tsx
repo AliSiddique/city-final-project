@@ -38,8 +38,8 @@ const schema = yup
 
 export default function SignupForm() {
     const router = useRouter()
-    const [loading, setLoading] = React.useState(false)
-    const [showPassword, setShowPassword] = React.useState(false)
+    const [loading, setLoading] = React.useState<boolean>(false)
+    const [showPassword, setShowPassword] = React.useState<boolean>(false)
     const {
         register,
         handleSubmit,
@@ -62,7 +62,7 @@ export default function SignupForm() {
                     toast,
                     router
                 )
-            ) // dispatch register function
+            ) 
             setLoading(false)
         } catch (error: any) {
             toast.error(error)

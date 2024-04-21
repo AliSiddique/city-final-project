@@ -7,7 +7,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import {
     Table,
@@ -21,11 +20,9 @@ import { Badge } from "./badge"
 import { Button } from "./button"
 import {
     DropdownMenu,
-    DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
@@ -89,7 +86,7 @@ export default function ImageTableRows({ files }: Props) {
                         </TableHeader>
                         <TableBody>
                             {files.map((file: FileData) => (
-                                <TableRow>
+                                <TableRow key={file.id}>
                                     <TableCell className="hidden sm:table-cell">
                                         <Link
                                             href={`/dashboard/images/${file.id}`}

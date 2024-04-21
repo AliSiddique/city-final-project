@@ -25,8 +25,8 @@ const schema = yup
     .required()
 
 export default function LoginForm() {
-    const [loading, setLoading] = React.useState(false)
-    const [showPassword, setShowPassword] = React.useState(false)
+    const [loading, setLoading] = React.useState<boolean>(false)
+    const [showPassword, setShowPassword] = React.useState<boolean>(false)
     const router = useRouter()
 
     const {
@@ -40,7 +40,6 @@ export default function LoginForm() {
     const dispatch = useAppDispatch()
     const onSubmit = handleSubmit((data: FormData) => {
         setLoading(true)
-
         try {
             const { email, password } = data
             dispatch(loginUser(email, password, toast, router)) // dispatch register function

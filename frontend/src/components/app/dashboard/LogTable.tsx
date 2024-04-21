@@ -34,16 +34,16 @@ type LogColor = {
 }
 
 const logColors: LogColor = {
-    "image.uploaded": "bg-green-500",
+    "image.uploaded": "bg-sky-500",
     "image.labelled.success": "bg-green-500",
-    "image.comment": "purple",
+    "image.comment": "bg-orange-500",
     "image.analytics": "orange",
-    "image.delete": "red",
-    "image.labelled.failed": "yellow",
+    "image.delete": "bg-red-500",
+    "image.labelled.failed": "bg-red-500",
 }
 
 export default function LogTable({ logs }: { logs: Logs[] }) {
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState<boolean>(false)
     const convertFilesToXML = (logs: Logs[]) => {
         let xmlData = '<?xml version="1.0" encoding="UTF-8"?>\n<files>\n'
         logs.forEach((log: Logs) => {
@@ -54,21 +54,14 @@ export default function LogTable({ logs }: { logs: Logs[] }) {
     }
 
     const downloadXML = () => {
-        // Assuming you have a function to convert 'files' into XML format
         const xmlData = convertFilesToXML(logs)
-
         const blob = new Blob([xmlData], { type: "application/xml" })
         const url = URL.createObjectURL(blob)
-
         const link = document.createElement("a")
         link.href = url
         link.setAttribute("download", "user_list.xml")
-
         document.body.appendChild(link)
-
         link.click()
-
-        // Clean up
         URL.revokeObjectURL(url)
         document.body.removeChild(link)
     }
@@ -97,19 +90,13 @@ export default function LogTable({ logs }: { logs: Logs[] }) {
                     `${log.id},${log.log},${formattedDate(log.created_at)},${log.url},${log.method}`
             )
             .join("\n")
-
         const blob = new Blob([textData], { type: "text/plain" })
         const url = URL.createObjectURL(blob)
-
         const link = document.createElement("a")
         link.href = url
         link.setAttribute("download", "user_list.txt")
-
         document.body.appendChild(link)
-
         link.click()
-
-        // Clean up
         URL.revokeObjectURL(url)
         document.body.removeChild(link)
     }

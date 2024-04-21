@@ -1,14 +1,12 @@
 # Use an official Python runtime as a parent image
 FROM python:3.9
 
-# Set environment variables for unbuffered output and to not generate .pyc files
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Set your environment variables
+# Environment variables
 ENV DEBUG=True
 ENV STRIPE_SECRET_KEY=sk_test_51NBfIhIu9v54yQAF2yL4VjNtrGGTbsqKLDjCZND6fyZysA5HZsxbAK2bMZqAlBI2oVTO0KYsdaatzEIW4G2EIhTm00npxwEAWi
 ENV STRIPE_WEBHOOK_SECRET=2QWS
@@ -21,7 +19,6 @@ ENV AWS_S3_REGION_NAME=eu-west-2
 ENV AWS_S3_FILE_OVERWRITE=False
 ENV AWS_QUERYSTRING_AUTH=False
 ENV AWS_QUERYSTRING_EXPIRE = 63115200
-
 
 
 ENV EMAIL_HOST=smtp.sendgrid.net
@@ -47,12 +44,11 @@ COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 
-
 # Copy the current directory contents into the container at /app
 COPY . /app/
 
 # Expose the port that Django runs on
 EXPOSE 8000
 
-# Define the command to run your application
+# Command needed to run
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

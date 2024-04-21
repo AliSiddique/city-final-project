@@ -1,18 +1,9 @@
 "use client"
 import { useState } from "react"
-import {
-    CogIcon,
-    HeartIcon,
-    HomeIcon,
-    PhotoIcon,
-    RectangleStackIcon,
-    Squares2X2Icon as Squares2X2IconOutline,
-    UserGroupIcon,
-} from "@heroicons/react/24/outline"
+import {HeartIcon} from "@heroicons/react/24/outline"
 import {
     Bars4Icon,
     PencilIcon,
-    PlusIcon,
     Squares2X2Icon as Squares2X2IconMini,
 } from "@heroicons/react/20/solid"
 import { Button } from "@/components/ui/button"
@@ -161,12 +152,12 @@ export default function LabelledImages({ files }: Props) {
                                         Recently viewed
                                     </h2>
                                     <ul
-                                        role="list"
+                                        key={currentFile.id}
                                         className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
                                     >
                                         {files.map((file: any) => (
                                             <li
-                                                key={file.name}
+                                                key={Math.random()}
                                                 className="relative"
                                             >
                                                 <div

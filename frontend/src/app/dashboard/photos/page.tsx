@@ -1,4 +1,4 @@
-import Photos from "@/components/app/dashboard/Photos"
+// import Photos from "@/components/app/dashboard/Photos"
 import { getBackendDetails } from "@/lib/utils"
 import { cookies } from "next/headers"
 import React from "react"
@@ -12,7 +12,7 @@ async function page({}: Props) {
     )
     return (
         <div>
-            <Photos files={files} />
+            {/* <Photos files={files} /> */}
         </div>
     )
 }

@@ -5,7 +5,7 @@ from .serializers import LogSerializer
 from rest_framework.response import Response
 from rest_framework import status
 
-# Create your views here.
+# Get logs view function to get all logs for the current user
 @api_view(["GET"])
 def get_logs(request):
     try:

@@ -11,7 +11,7 @@ type Props = {
     children: React.ReactNode
 }
 const storeValue = configuredStore()
-
+// Make a Redux Provider with a QueryClientProvider
 const RootRedux = ({ children }: Props) => (
     <QueryClientProvider client={queryClient}>
         <Provider store={storeValue}>

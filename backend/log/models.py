@@ -1,5 +1,5 @@
 from django.db import models
-
+# Log options
 OPTIONS = (
     ("image.uploaded", "Image Uploaded"),
     ("image.labelled.success", "Image Labelled Successfully"),
@@ -8,6 +8,8 @@ OPTIONS = (
     ("image.delete", "Image Deleted"),
     ("image.labelled.failed", "Failed to Label Image"),
 )
+
+# Method options
 method_options = (
     ("GET", "GET"),
     ("POST", "POST"),
@@ -17,6 +19,8 @@ method_options = (
     ("OPTIONS", "OPTIONS"),
 
 )
+
+# Log model to store logs
 class Log(models.Model):
     log = models.CharField(max_length=255, choices=OPTIONS)
     created_at = models.DateTimeField(auto_now_add=True)

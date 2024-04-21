@@ -13,8 +13,6 @@ from labelling.models import LabelledImage
 from django.db.models import Sum
 
 
-
-# Create your views here.
 # Get analytics view function to get analytics data for the last 7 days
 @api_view(['GET'])
 def get_analytics(request):
@@ -38,10 +36,9 @@ def get_analytics(request):
             uploaded_at__lte=seven_days_ago
         ).aggregate(total_prediction_time=Sum('prediction_time'))
         
-
+        # Calculate the difference between today and yesterday
         today = timezone.now().date()
         yesterday = today - timedelta(days=1)
-        day_before_yesterday = yesterday - timedelta(days=1)
         today = LabelledImagesAnalytics.objects.filter(
             user=user,
             created_at__lte=today
@@ -54,15 +51,11 @@ def get_analytics(request):
         ).count()
 
         difference_from_yesterday =  today - yesterday
-        print(f"differece {difference_from_yesterday}")
         # Calculate the difference between yesterday and the day before yesterday
         # Create a list of dates for the last 7 days
         date_list = [(seven_days_ago + timedelta(days=x)).date() for x in range(7)]
-
         # Convert the dates to string in the same format as in the analytics data
         date_strings = [date.strftime("%Y-%m-%d") for date in date_list]
-
-        # Create a dictionary to store the analytics data for each date
         # Create a dictionary to store the analytics data for each date
         analytics_dict = {entry['date']: entry['total_amount'] for entry in analytics}
 

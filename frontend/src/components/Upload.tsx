@@ -1,26 +1,21 @@
 "use client"
 import { FormEvent, useState } from "react"
 import { UserCircleIcon } from "@heroicons/react/24/solid"
-
 import { toast } from "sonner"
 import { BASEURL } from "@/API/APIRoute"
-import { Image } from "lucide-react"
 import { Button } from "./ui/button"
 import Link from "next/link"
 import { Tabs, TabsContent, TabsList } from "./ui/tabs"
 import { TabsTrigger } from "./ui/tabs"
 
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(" ")
-}
 
 export default function Upload({ token }: { token: string }) {
     const [image, setImage] = useState<any>(null)
     const [multiple, setMultiple] = useState<any>([])
+    const [name, setName] = useState<string>("")
+    const [loading, setLoading] = useState<boolean>(false)
+    const [description, setDescription] = useState<string>("")
 
-    const [name, setName] = useState("")
-    const [loading, setLoading] = useState(false)
-    const [description, setDescription] = useState("")
     const handleSubmit = async (e: FormEvent) => {
         const toastId = toast.loading("Uploading image...")
         e.preventDefault()
@@ -31,7 +26,7 @@ export default function Upload({ token }: { token: string }) {
         formData.append("description", description)
 
         if (token) {
-            var requestOptions: any = {
+            var requestOptions:any = {
                 method: "POST",
                 body: formData,
                 redirect: "follow",
@@ -41,16 +36,13 @@ export default function Upload({ token }: { token: string }) {
                 },
             }
 
-            // Now you can proceed with the fetch request using requestOptions
             await fetch(`${BASEURL}/api/photo`, requestOptions)
                 .then((response) => {
                     response.text()
-                    //   window.location.reload()
                 })
                 .then((result) => {
                     toast.success("Image uploaded successfully")
                     console.log(result)
-                    // window.location.reload()
                 })
                 .catch((error) => console.log("error", error))
             toast.success("Image uploaded successfully", {
@@ -64,7 +56,6 @@ export default function Upload({ token }: { token: string }) {
         setLoading(false)
     }
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // Accessing files from the event
         const files = e.target.files
 
         // Convert FileList to an array if files exist
@@ -96,21 +87,19 @@ export default function Upload({ token }: { token: string }) {
                 },
             }
 
-            // Now you can proceed with the fetch request using requestOptions
             await fetch(`${BASEURL}/api/upload-multiple`, requestOptions)
                 .then((response) => {
                     response.text()
-                    //   window.location.reload()
+                    toast.success("Image uploaded successfully", {
+                        id: toastId,
+                    })
                 })
                 .then((result) => {
                     toast.success("Image uploaded successfully")
                     console.log(result)
-                    // window.location.reload()
                 })
-                .catch((error) => console.log("error", error))
-            toast.success("Image uploaded successfully", {
-                id: toastId,
-            })
+                .catch((error) => toast.error("error", error))
+         
         } else {
             toast.error("Error uploading image", {
                 id: toastId,
@@ -198,20 +187,6 @@ export default function Upload({ token }: { token: string }) {
                                             Image
                                         </label>
                                         <div className="mt-2 flex items-center gap-x-3">
-                                            {/* {image ? (
-                                        <img
-                                            src={URL.createObjectURL(image && image[0])}
-                                            alt="profile"
-                                            className="h-28 w-28 rounded-full"
-                                        />
-                                    
-                                    ): (
-                                        <UserCircleIcon
-                                            className="h-28 w-28 text-gray-300"
-                                            aria-hidden="true"
-                                        />
-                                    
-                                    )} */}
 
                                             <input
                                                 type="file"
@@ -317,23 +292,7 @@ export default function Upload({ token }: { token: string }) {
                                             Image
                                         </label>
                                         <div className="mt-2 flex items-center gap-x-3">
-                                            {image ? (
-                                                // <img
-                                                //     src={URL.createObjectURL(image && image[0])}
-                                                //     alt="profile"
-
-                                                //     className="h-28 w-28 rounded-full"
-                                                // />
-                                                <h1 className="text-2xl font-semibold text-gray-900">
-                                                    Multiple images
-                                                </h1>
-                                            ) : (
-                                                <UserCircleIcon
-                                                    className="h-28 w-28 text-gray-300"
-                                                    aria-hidden="true"
-                                                />
-                                            )}
-
+                                           
                                             <input
                                                 type="file"
                                                 multiple
@@ -368,18 +327,3 @@ export default function Upload({ token }: { token: string }) {
         </div>
     )
 }
-
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/

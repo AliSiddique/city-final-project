@@ -18,7 +18,6 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import Image from "next/image"
 import {
     Table,
     TableBody,
@@ -27,11 +26,9 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { File, ListFilter, PlusCircle } from "lucide-react"
 import { MoreHorizontal } from "lucide-react"
-import { cookies } from "next/headers"
-import axios from "axios"
 import Link from "next/link"
 import { formattedDate } from "@/lib/utils"
 type Props = {
@@ -45,7 +42,6 @@ type Props = {
 }
 
 export default function PhotosTable({ files }: Props) {
-    console.log(files)
     return (
         <div>
             <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
