@@ -12,6 +12,7 @@ class PhotoSerializer(serializers.ModelSerializer):
 
 # Labelled Image Serializer
 class LabelledImageSerializer(serializers.ModelSerializer):
+    # images = serializers.ReadOnlyField(source='image.image')
     class Meta:
         model = LabelledImage
         fields = "__all__"

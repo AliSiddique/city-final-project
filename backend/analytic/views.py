@@ -67,7 +67,6 @@ def get_analytics(request):
         # Create a list of dictionaries containing date and total_amount
         analytics_data = [{'date': date, 'total_amount': total_amount} for date, total_amount in analytics_dict.items()]
         Log.objects.create(log="image.analytics",url="/api/analytics",method="GET", user=user)
-        print(user)
         return Response({"analytics": analytics_data,"prediction_time":total_prediction_times['total_prediction_time']}, status=status.HTTP_200_OK)
     except User.DoesNotExist:
         return Response({"error": "User does not exist."}, status=status.HTTP_404_NOT_FOUND)
