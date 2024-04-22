@@ -12,6 +12,7 @@ import Link from "next/link"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { formattedDate } from "@/lib/utils"
+import { CheckIcon } from "lucide-react"
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ")
@@ -119,52 +120,9 @@ const recentlyLabelled = files.filter((file) => {
 
                                         </TabsList>
 
-                                                {/* {tabs.map((tab) => (
-                                                    <a
-                                                        key={tab.name}
-                                                        href={tab.href}
-                                                        aria-current={
-                                                            tab.current
-                                                                ? "page"
-                                                                : undefined
-                                                        }
-                                                        className={classNames(
-                                                            tab.current
-                                                                ? "border-indigo-500 text-indigo-600"
-                                                                : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                                                            "whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium"
-                                                        )}
-                                                    >
-                                                        {tab.name}
-                                                    </a>
-                                                ))} */}
+                                               
                                             </nav>
-                                            {/* <div className="ml-6 hidden items-center rounded-lg bg-gray-100 p-0.5 sm:flex">
-                                                <button
-                                                    type="button"
-                                                    className="rounded-md p-1.5 text-gray-400 hover:bg-white hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-                                                >
-                                                    <Bars4Icon
-                                                        className="h-5 w-5"
-                                                        aria-hidden="true"
-                                                    />
-                                                    <span className="sr-only">
-                                                        Use list view
-                                                    </span>
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    className="ml-0.5 rounded-md bg-white p-1.5 text-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-                                                >
-                                                    <Squares2X2IconMini
-                                                        className="h-5 w-5"
-                                                        aria-hidden="true"
-                                                    />
-                                                    <span className="sr-only">
-                                                        Use grid view
-                                                    </span>
-                                                </button>
-                                            </div> */}
+                                         
                                         </div>
                                     </div>
                                 </div>
@@ -199,7 +157,8 @@ const recentlyLabelled = files.filter((file) => {
                                                 >
                                                     <img
                                                         src={file.labelled_image}
-                                                        alt=""
+                                                        alt={file.labelled_image}
+                                                        className="object-cover w-72 h-72 rounded-lg"
                                                        
                                                     />
                                                     <button
@@ -248,7 +207,8 @@ const recentlyLabelled = files.filter((file) => {
                 >
                     <img
                         src={file.labelled_image}
-                        alt=""
+                        alt={file.labelled_image}
+                        className="object-cover w-72 h-72 rounded-lg"
                         
                     />
                     <button
@@ -278,18 +238,16 @@ const recentlyLabelled = files.filter((file) => {
                                     <div className="aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg">
                                         <img
                                             src={currentFile.labelled_image}
-                                            alt=""
-                                            className="object-cover"
+                                            alt={currentFile.labelled_image}
+                                            className="object-cover h-80 w-72 "
                                         />
                                     </div>
                                     <div className="mt-4 flex items-start justify-between">
                                         <div>
-                                            <h2 className="text-lg font-medium text-gray-900">
-                                                <span className="sr-only">
-                                                    Details for{" "}
-                                                </span>
-                                                {currentFile.labelled_image}
-                                            </h2>
+                                            <Link href={currentFile.labelled_image} target="_blank" className="text-lg font-medium text-accent-foreground underline">
+                                                
+                                                Original image
+                                            </Link>
                                           
                                         </div>
                                         <button
@@ -297,10 +255,18 @@ const recentlyLabelled = files.filter((file) => {
                                             className="relative ml-4 flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                         >
                                             <span className="absolute -inset-1.5" />
-                                            <HeartIcon
-                                                className="h-6 w-6"
-                                                aria-hidden="true"
-                                            />
+                                            {currentFile.isSegmented ? (
+                                                <CheckIcon
+                                                    className="h-6 w-6"
+                                                    aria-hidden="true"
+                                                />
+                                            ) : (
+                                                <PencilIcon
+                                                    className="h-6 w-6"
+                                                    aria-hidden="true"
+                                                />
+                                            )}
+                                         
                                             <span className="sr-only">
                                                 Favorite
                                             </span>

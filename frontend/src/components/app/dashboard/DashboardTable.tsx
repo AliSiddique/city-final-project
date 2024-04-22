@@ -37,9 +37,7 @@ export default function DashboardTable({ token, files }: Props) {
     const labelledFiles = files?.filter(
         (file: FileData) => file.isLabelled == true
     )
-    const archivedFiles = files?.filter(
-        (file: FileData) => file.tag == "archived"
-    )
+  
     const [loading, setLoading] = React.useState(false)
     const router = useRouter()
 
@@ -131,15 +129,11 @@ export default function DashboardTable({ token, files }: Props) {
                                     Labelled
                                 </TabsTrigger>
                                 <TabsTrigger value="draft">Draft</TabsTrigger>
-                                <TabsTrigger
-                                    value="archived"
-                                    className="hidden sm:flex"
-                                >
-                                    Archived
-                                </TabsTrigger>
+                            
                             </TabsList>
                             <div className="ml-auto flex items-center gap-2">
                                 <Button
+                                disabled={loading || files.length === 0 || labelledFiles.length === files.length}
                                     onClick={labelAll}
                                     size="sm"
                                     variant="outline"
@@ -207,9 +201,7 @@ export default function DashboardTable({ token, files }: Props) {
                         <TabsContent value="labelled">
                             <ImageTableRows files={labelledFiles} />
                         </TabsContent>
-                        <TabsContent value="archived">
-                            <ImageTableRows files={archivedFiles} />
-                        </TabsContent>
+                      
                     </Tabs>
                 </main>
             )}

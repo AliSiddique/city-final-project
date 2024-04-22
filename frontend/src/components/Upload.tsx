@@ -212,7 +212,7 @@ export default function Upload({ token }: { token: string }) {
                                 <Link href="/dashboard">Cancel</Link>
                             </Button>
                             <Button
-                                disabled={loading}
+                                disabled={loading || name === "" || !image || !description}
                                 type="submit"
                                 className="rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
@@ -314,7 +314,7 @@ export default function Upload({ token }: { token: string }) {
                                 <Link href="/dashboard">Cancel</Link>
                             </Button>
                             <Button
-                                disabled={loading}
+                                disabled={loading || name === ""  || !description}
                                 type="submit"
                                 className="rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >

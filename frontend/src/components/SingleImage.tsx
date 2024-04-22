@@ -14,7 +14,16 @@ import { formattedDate } from "@/lib/utils"
 import { Badge } from "./ui/badge"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
-const choices = {
+interface Model {
+    name: string
+    description: string
+    url: string
+
+}
+interface Choices {
+    models: Model[]
+}
+const choices:Choices = {
     models: [
         {
             name: "Segmentation",
@@ -62,7 +71,7 @@ interface Props {
     }
 }
 
-export default function SingleImage({ token, file }: any) {
+export default function SingleImage({ token, file }: Props) {
     const [loading, setLoading] = useState(false)
     const [comments, setComments] = useState<Comment[]>(file.comments ?? [])
     const [newComment, setNewComment] = useState("")
@@ -96,7 +105,7 @@ export default function SingleImage({ token, file }: any) {
     }
     const [labelled_image, setLabelled_image] = useState(null)
 
-    // Label imafe function
+    // Label image function
     const handleLabel = async (e: FormEvent) => {
         e.preventDefault()
         try {
@@ -108,6 +117,8 @@ export default function SingleImage({ token, file }: any) {
             const data = res.data
             setLabelled_image(data.labelled_image)
             setLoading(false)
+            router.refresh()
+
             toast.success("Image labelled successfully")
         } catch (error) {
             toast.error("Error labelling image")
@@ -169,7 +180,7 @@ export default function SingleImage({ token, file }: any) {
                             <div className="h-96 overflow-hidden rounded-lg">
                                 <img
                                     src={file?.photo?.image}
-                                    alt={file?.photo?.name}
+                                    alt={file?.photo?.name ?? "Photo"}
                                     className="h-96 w-full object-cover "
                                 />
                             </div>
@@ -191,8 +202,8 @@ export default function SingleImage({ token, file }: any) {
                                                 Choose a model
                                             </RadioGroup.Label>
                                             <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                                {choices.models.map(
-                                                    (model: any) => (
+                                                {choices?.models.map(
+                                                    (model: Model) => (
                                                         <RadioGroup.Option
                                                             as="div"
                                                             key={model.name}
@@ -286,7 +297,7 @@ export default function SingleImage({ token, file }: any) {
                                     <div className="overflow-hidden  aspect-video bg-red-400 cursor-pointer rounded-xl relative group">
                                         <div className="rounded-xl z-50 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out cursor-pointer absolute from-black/80 to-transparent bg-gradient-to-t inset-x-0 -bottom-2 pt-30 text-white flex items-end">
                                             <div>
-                                                <div className="transform-gpu  p-4 space-y-3 text-xl group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 pb-10 transform transition duration-300 ease-in-out">
+                                                <div className="  p-4 space-y-3 text-xl group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 pb-10 transform transition duration-300 ease-in-out">
                                                     <div className="font-bold">
                                                        Segmented Image
                                                     </div>
@@ -316,7 +327,7 @@ export default function SingleImage({ token, file }: any) {
                                     <div className="overflow-hidden  aspect-video bg-red-400 cursor-pointer rounded-xl relative group">
                                         <div className="rounded-xl z-50 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out cursor-pointer absolute from-black/80 to-transparent bg-gradient-to-t inset-x-0 -bottom-2 pt-30 text-white flex items-end">
                                             <div>
-                                                <div className="transform-gpu  p-4 space-y-3 text-xl group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 pb-10 transform transition duration-300 ease-in-out">
+                                                <div className="  p-4 space-y-3 text-xl group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 pb-10 transform transition duration-300 ease-in-out">
                                                     <div className="font-bold">
                                                        Labelled Image
                                                     </div>

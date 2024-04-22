@@ -44,6 +44,7 @@ const logColors: LogColor = {
 
 export default function LogTable({ logs }: { logs: Logs[] }) {
     const [open, setOpen] = useState<boolean>(false)
+    const [log, setLog] = useState<Logs>(logs[0])
     const convertFilesToXML = (logs: Logs[]) => {
         let xmlData = '<?xml version="1.0" encoding="UTF-8"?>\n<files>\n'
         logs.forEach((log: Logs) => {
@@ -189,11 +190,7 @@ export default function LogTable({ logs }: { logs: Logs[] }) {
                                     </th>
                                 </tr>
                             </thead>
-
-                            <tbody className="divide-y divide-gray-200 bg-white">
-                                {logs.map((log: Logs) => (
-                                    <tr key={log.id}>
-                                        {open && (
+                            {open && (
                                             <LogView
                                                 id={log.id}
                                                 log={log.log}
@@ -204,6 +201,10 @@ export default function LogTable({ logs }: { logs: Logs[] }) {
                                                 setOpen={setOpen}
                                             />
                                         )}
+                            <tbody className="divide-y divide-gray-200 bg-white">
+                                {logs.map((log: Logs) => (
+                                    <tr key={log.id}>
+                                     
                                         <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-0">
                                             {log.id}
                                         </td>
@@ -225,7 +226,9 @@ export default function LogTable({ logs }: { logs: Logs[] }) {
                                         </td>
                                         <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                                             <button
-                                                onClick={() => setOpen(!open)}
+                                                onClick={() => {
+                                                    setLog(log)
+                                                     setOpen(!open)}}
                                                 className="text-indigo-600 hover:text-indigo-900"
                                             >
                                                 View
