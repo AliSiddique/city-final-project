@@ -232,9 +232,7 @@ def get_labelled_photos(request):
         # Serialize the labelled photos
         serializer = LabelledImageSerializer(labelled_photos, many=True)
         
-        # Extract the URLs of labelled images
-
-        return Response({"data": serializer.data})
+        return Response(serializer.data)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
@@ -331,7 +329,7 @@ def label_all(request):
             image_decoded = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
             # Predict the image
             results = model.predict(source=image_decoded) 
-            
+
             # Loop through the results and plot the bounding boxes
             for r in results:
                 im_array = r.plot() 
