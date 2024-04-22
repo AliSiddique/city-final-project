@@ -12,7 +12,7 @@ export default async function page({}: Props) {
     )
     return (
         <div>
-            <LabelledImages files={files.labelled_images} />
+            <LabelledImages files={files.data} />
         </div>
     )
 }

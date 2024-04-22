@@ -9,27 +9,49 @@ import {
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
-const tabs = [
-    { name: "Recently Viewed", href: "#", current: true },
-    { name: "Recently Added", href: "#", current: false },
-    { name: "Favorited", href: "#", current: false },
-]
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { formattedDate } from "@/lib/utils"
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ")
 }
+interface File {
+    id: string
+    labelled_image: string
+    label: number
+    confidence: string
+    isSegmented: boolean
+    uploaded_at: string
+    prediction_time: string
+    image: string
+}
 interface Props {
-    files: string[]
+    files: File[]
 }
 
 export default function LabelledImages({ files }: Props) {
-    const [currentFile, setCurrentFile] = useState<any>(files[0])
+    const [currentFile, setCurrentFile] = useState<File>(files[0])
+// Get the current date
+const currentDate = new Date();
 
+// Calculate the date 7 days prior to the current date
+const sevenDaysAgo = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+// Assuming `files` is an array of objects with an `uploaded_at` property representing the upload date
+const recentlyLabelled = files.filter((file) => {
+    // Convert file's upload date string to a Date object
+    const uploadDate = new Date(file.uploaded_at);
+
+    // Check if the upload date is within the last 7 days
+    return uploadDate > sevenDaysAgo;
+});
     return (
-        <>
             <div className="flex h-full">
                 <div className="flex flex-1 flex-col overflow-hidden">
                     <div className="flex flex-1 items-stretch overflow-hidden">
+                    <Tabs defaultValue="recentlylabelled" >
+
                         <main className="flex-1 overflow-y-auto">
                             <div className="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
                                 <div className="flex">
@@ -80,17 +102,24 @@ export default function LabelledImages({ files }: Props) {
                                             defaultValue="Recently Viewed"
                                         >
                                             <option>Recently Viewed</option>
-                                            <option>Recently Added</option>
-                                            <option>Favorited</option>
+                                            <option>All</option>
                                         </select>
                                     </div>
                                     <div className="hidden sm:block">
                                         <div className="flex items-center border-b border-gray-200">
+
+
                                             <nav
                                                 className="-mb-px flex flex-1 space-x-6 xl:space-x-8"
                                                 aria-label="Tabs"
                                             >
-                                                {tabs.map((tab) => (
+                                        <TabsList>
+                                            <TabsTrigger value="recentlylabelled">Recently Labelled</TabsTrigger>
+                                            <TabsTrigger value="all">All</TabsTrigger>
+
+                                        </TabsList>
+
+                                                {/* {tabs.map((tab) => (
                                                     <a
                                                         key={tab.name}
                                                         href={tab.href}
@@ -108,7 +137,7 @@ export default function LabelledImages({ files }: Props) {
                                                     >
                                                         {tab.name}
                                                     </a>
-                                                ))}
+                                                ))} */}
                                             </nav>
                                             <div className="ml-6 hidden items-center rounded-lg bg-gray-100 p-0.5 sm:flex">
                                                 <button
@@ -140,7 +169,8 @@ export default function LabelledImages({ files }: Props) {
                                     </div>
                                 </div>
 
-                                {/* Gallery */}
+                                <TabsContent value="recentlylabelled">
+
                                 <section
                                     className="mt-8 pb-16"
                                     aria-labelledby="gallery-heading"
@@ -149,13 +179,14 @@ export default function LabelledImages({ files }: Props) {
                                         id="gallery-heading"
                                         className="sr-only"
                                     >
-                                        Recently viewed
+                                        Recently Labelled
                                     </h2>
+
                                     <ul
                                         key={currentFile.id}
                                         className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
                                     >
-                                        {files.map((file: any) => (
+                                        {recentlyLabelled.map((file: File) => (
                                             <li
                                                 key={Math.random()}
                                                 className="relative"
@@ -164,22 +195,12 @@ export default function LabelledImages({ files }: Props) {
                                                     onClick={() =>
                                                         setCurrentFile(file)
                                                     }
-                                                    className={classNames(
-                                                        file.current
-                                                            ? "ring-2 ring-indigo-500 ring-offset-2"
-                                                            : "focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100",
-                                                        "aspect-w-10 aspect-h-7 group block w-full overflow-hidden rounded-lg bg-gray-100"
-                                                    )}
+                                                   
                                                 >
                                                     <img
-                                                        src={file}
+                                                        src={file.labelled_image}
                                                         alt=""
-                                                        className={classNames(
-                                                            file.current
-                                                                ? ""
-                                                                : "group-hover:opacity-75",
-                                                            "pointer-events-none object-cover h-72"
-                                                        )}
+                                                       
                                                     />
                                                     <button
                                                         type="button"
@@ -187,29 +208,76 @@ export default function LabelledImages({ files }: Props) {
                                                     >
                                                         <span className="sr-only">
                                                             View details for{" "}
-                                                            {file.name}
+                                                            {file.labelled_image}
                                                         </span>
                                                     </button>
                                                 </div>
-                                                <p className="pointer-events-none mt-2 block truncate text-sm font-medium text-gray-900">
-                                                    {file.name}
-                                                </p>
-                                                <p className="pointer-events-none block text-sm font-medium text-gray-500">
-                                                    {file.size}
-                                                </p>
+                                               
                                             </li>
                                         ))}
                                     </ul>
                                 </section>
+                                </TabsContent>
+                                <TabsContent value="all">
+
+<section
+    className="mt-8 pb-16"
+    aria-labelledby="gallery-heading"
+>
+    <h2
+        id="gallery-heading"
+        className="sr-only"
+    >
+        Recently viewed
+    </h2>
+
+    <ul
+        key={currentFile.id}
+        className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
+    >
+        {files.map((file: File) => (
+            <li
+                key={Math.random()}
+                className="relative"
+            >
+                <div
+                    onClick={() =>
+                        setCurrentFile(file)
+                    }
+                    
+                >
+                    <img
+                        src={file.labelled_image}
+                        alt=""
+                        
+                    />
+                    <button
+                        type="button"
+                        className="absolute inset-0 focus:outline-none"
+                    >
+                        <span className="sr-only">
+                            View details for{" "}
+                            {file.labelled_image}
+                        </span>
+                    </button>
+                </div>
+               
+               
+            </li>
+        ))}
+    </ul>
+</section>
+</TabsContent>
                             </div>
                         </main>
+                        </Tabs>
 
                         <aside className="hidden w-96 overflow-y-auto border-l border-gray-200 bg-white p-8 lg:block">
                             <div className="space-y-6 pb-16">
                                 <div>
                                     <div className="aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg">
                                         <img
-                                            src={currentFile}
+                                            src={currentFile.labelled_image}
                                             alt=""
                                             className="object-cover"
                                         />
@@ -220,11 +288,9 @@ export default function LabelledImages({ files }: Props) {
                                                 <span className="sr-only">
                                                     Details for{" "}
                                                 </span>
-                                                {currentFile.name}
+                                                {currentFile.labelled_image}
                                             </h2>
-                                            <p className="text-sm font-medium text-gray-500">
-                                                {currentFile.size}
-                                            </p>
+                                          
                                         </div>
                                         <button
                                             type="button"
@@ -249,9 +315,7 @@ export default function LabelledImages({ files }: Props) {
                                         <div className="flex justify-between py-3 text-sm font-medium">
                                             <dt className="text-gray-500">s</dt>
                                             <dd className="whitespace-nowrap text-gray-900">
-                                                {
-                                                    // @ts-ignore
-                                                }
+                                                {formattedDate(currentFile.uploaded_at)}
                                             </dd>
                                         </div>
                                     </dl>
@@ -261,9 +325,7 @@ export default function LabelledImages({ files }: Props) {
                                         Description
                                     </h3>
                                     <div className="mt-2 flex items-center justify-between">
-                                        <p className="text-sm italic text-gray-500">
-                                            Add a description to this image.
-                                        </p>
+                                      
                                         <button
                                             type="button"
                                             className="relative flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -288,7 +350,7 @@ export default function LabelledImages({ files }: Props) {
                                     >
                                         <Link
                                             target="_blank"
-                                            href={currentFile}
+                                            href={currentFile.labelled_image}
                                         >
                                             Download
                                         </Link>
@@ -299,6 +361,5 @@ export default function LabelledImages({ files }: Props) {
                     </div>
                 </div>
             </div>
-        </>
     )
 }

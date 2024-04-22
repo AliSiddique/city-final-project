@@ -233,9 +233,8 @@ def get_labelled_photos(request):
         serializer = LabelledImageSerializer(labelled_photos, many=True)
         
         # Extract the URLs of labelled images
-        labelled_images = [labelled.labelled_image.url for labelled in labelled_photos]
 
-        return Response({"labelled_images": labelled_images})
+        return Response({"data": serializer.data})
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
