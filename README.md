@@ -1,7 +1,7 @@
 # Project Setup and Deployment Guide
 
 ## Overview
-This guide will walk you through the steps to set up and run both the frontend and backend components of Open comp.
+This will take you through the steps needed to run the project.
 
 ## Links
 - Project Repository `https://github.com/AliSiddique/city-final-project`
@@ -12,18 +12,19 @@ This guide will walk you through the steps to set up and run both the frontend a
 - Node.js and npm installed on your machine
 - Git installed on your machine
 - Access to the project repository
-- Python Version 3.11.7
+- Python Version 3.12.2
 - Node Version 20.3.0
 - Code editor - Preferably VSCode
 - VScode needs the python extension to work
+- Docker (If using Docker)
 
 
 ## Frontend Setup
-### Options 
+## Options 
 
-1. Clone the frontend repository:
+1. ### Clone the frontend repository:
     ```
-    git clone https://github.com/AliSiddique/city-final-project
+    git clone https://github.com/AliSiddique/city-final-project/frontend
     ```
 - Open the project on Vscode
 -  Run 
@@ -40,11 +41,12 @@ This guide will walk you through the steps to set up and run both the frontend a
   npm run dev
   ```    
 
-2. Download Code folder
-    ```
+### 2. Download Code folder
+- Cd into frontend  
+     ```
     cd frontend
     ```
-3. Install dependencies:
+- Install dependencies:
     ```
     npm i
     ```
@@ -59,15 +61,20 @@ This guide will walk you through the steps to set up and run both the frontend a
 ## Running the Frontend
 - Open your web browser and navigate to `http://localhost:3000` to view the frontend.
 
-## Backend Setup
-### Options 
+# Backend Setup
+## Options 
+- Run using python
+- Run using Docker
 
-1. Clone the frontend repository:
+
+## Python runtime
+1. Clone the Backend repository:
     ```
-    git clone https://github.com/AliSiddique/city-final-project
+    git clone https://github.com/AliSiddique/city-final-project/frontend
     ```
-- Open the project on Vscode
-- Add `.env` file with following variables
+  ### or download the code.
+2. Open the project on Vscode
+3. Add `.env` file with following variables if not present in backend.
     ```
     DB_ENGINE=django.db.backends.postgresql
     DB_NAME=railway
@@ -91,28 +98,42 @@ This guide will walk you through the steps to set up and run both the frontend a
     EMAIL_USE_TLS=True
     EMAIL_HOST_PASSWORD=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
     ```
--   ```
-    cd backend
-    ```
 
--   Run to make a virtual environment
+4.  Run to make a virtual environment
     ```
     python3 -m venv env
     ```
-- Activate the virtual environment - MacOS
+5. Activate the virtual environment - MacOS
   ```
   source env/bin/activate
   ```    
+6.  ```
+    cd backend
+    ```
 
-2. Install dependencies
+7. Install dependencies
     ```
     pip3 install -r requirements.txt
     ```
 
+### Docker runtime (Easier)
+1. Clone the Backend repository:
+    ```
+    git clone https://github.com/AliSiddique/city-final-project/frontend
+    ```
+  ###  or download the code.
 
+2. Run 
+    ```
+    docker build -t backend_image .
+    ```
+3. Run 
+    ```
+    docker run -p 127.0.0.1:8000:8000 backend_image
+    ```
 
 ## Running the Backend
-- Once you have the dependencies installed you can run the backend
+- Once you have the dependencies installed you can run the backend (Using Pythnon runtime)
 1. Start the backend server:
     ```
     python manage.py runserver
@@ -121,6 +142,5 @@ This guide will walk you through the steps to set up and run both the frontend a
 
 ## Additional Notes
 - Make sure both frontend and backend servers are running simultaneously for the full functionality of the project.
-
 
 - When labelling the data, two model will be download for the segmentation and labelling of the images
