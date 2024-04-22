@@ -139,7 +139,7 @@ const recentlyLabelled = files.filter((file) => {
                                                     </a>
                                                 ))} */}
                                             </nav>
-                                            <div className="ml-6 hidden items-center rounded-lg bg-gray-100 p-0.5 sm:flex">
+                                            {/* <div className="ml-6 hidden items-center rounded-lg bg-gray-100 p-0.5 sm:flex">
                                                 <button
                                                     type="button"
                                                     className="rounded-md p-1.5 text-gray-400 hover:bg-white hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
@@ -164,7 +164,7 @@ const recentlyLabelled = files.filter((file) => {
                                                         Use grid view
                                                     </span>
                                                 </button>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 </div>
@@ -313,35 +313,14 @@ const recentlyLabelled = files.filter((file) => {
                                     </h3>
                                     <dl className="mt-2 divide-y divide-gray-200 border-b border-t border-gray-200">
                                         <div className="flex justify-between py-3 text-sm font-medium">
-                                            <dt className="text-gray-500">s</dt>
+                                            <dt className="text-gray-500">Date uploaded</dt>
                                             <dd className="whitespace-nowrap text-gray-900">
                                                 {formattedDate(currentFile.uploaded_at)}
                                             </dd>
                                         </div>
                                     </dl>
                                 </div>
-                                <div>
-                                    <h3 className="font-medium text-gray-900">
-                                        Description
-                                    </h3>
-                                    <div className="mt-2 flex items-center justify-between">
-                                      
-                                        <button
-                                            type="button"
-                                            className="relative flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                        >
-                                            <span className="absolute -inset-1.5" />
-                                            <PencilIcon
-                                                className="h-5 w-5"
-                                                aria-hidden="true"
-                                            />
-                                            <span className="sr-only">
-                                                Add description
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
-
+                       
                                 <div className="flex gap-x-3">
                                     <Button
                                         asChild

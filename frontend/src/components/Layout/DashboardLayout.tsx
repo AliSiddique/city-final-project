@@ -43,6 +43,8 @@ interface Props {
 export default function Dashboard({ children }: Props) {
     const [search, setSearch] = useState<string>("")
     const dispatch = useAppDispatch()
+    const router = useRouter()
+
     // Search on enter
     React.useEffect(() => {
         const down = (e: KeyboardEvent) => {
@@ -57,7 +59,6 @@ export default function Dashboard({ children }: Props) {
         document.addEventListener("keydown", down)
         return () => document.removeEventListener("keydown", down)
     }, [search])
-    const router = useRouter()
 
     return (
         <div className="flex min-h-screen w-full flex-col bg-muted/40 z-10">
@@ -236,7 +237,12 @@ export default function Dashboard({ children }: Props) {
                                     <DropdownMenuSeparator />
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem
-                                        onClick={() => dispatch(logout())}
+                                        onClick={() => 
+                                            {
+                                                dispatch(logout())
+                                                router.push("/user/login")
+                                            }                                        
+                                        }
                                     >
                                         Logout
                                     </DropdownMenuItem>
