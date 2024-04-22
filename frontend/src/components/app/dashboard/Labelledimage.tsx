@@ -30,7 +30,7 @@ interface Props {
     files: File[]
 }
 
-export default function LabelledImages({ files }: Props) {
+export default function LabelledImages({ files = [] }: Props) {
     const [currentFile, setCurrentFile] = useState<File>(files[0])
     // Get the current date
     const currentDate = new Date()
@@ -141,7 +141,7 @@ export default function LabelledImages({ files }: Props) {
                                             key={Math.random()}
                                             className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
                                         >
-                                            {recentlyLabelled.map(
+                                            {recentlyLabelled?.map(
                                                 (file: File) => (
                                                     <li
                                                         key={Math.random()}
@@ -156,10 +156,10 @@ export default function LabelledImages({ files }: Props) {
                                                         >
                                                             <img
                                                                 src={
-                                                                    file.labelled_image
+                                                                    file?.labelled_image
                                                                 }
                                                                 alt={
-                                                                    file.labelled_image
+                                                                    file?.labelled_image
                                                                 }
                                                                 className="object-cover w-72 h-72 rounded-lg"
                                                             />
@@ -171,7 +171,7 @@ export default function LabelledImages({ files }: Props) {
                                                                     View details
                                                                     for{" "}
                                                                     {
-                                                                        file.labelled_image
+                                                                        file?.labelled_image
                                                                     }
                                                                 </span>
                                                             </button>
@@ -198,7 +198,7 @@ export default function LabelledImages({ files }: Props) {
                                             key={Math.random()}
                                             className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
                                         >
-                                            {files.map((file: File) => (
+                                            {files?.map((file: File) => (
                                                 <li
                                                     key={Math.random()}
                                                     className="relative"
@@ -210,10 +210,10 @@ export default function LabelledImages({ files }: Props) {
                                                     >
                                                         <img
                                                             src={
-                                                                file.labelled_image
+                                                                file?.labelled_image
                                                             }
                                                             alt={
-                                                                file.labelled_image
+                                                                file?.labelled_image
                                                             }
                                                             className="object-cover w-72 h-72 rounded-lg"
                                                         />
@@ -224,7 +224,7 @@ export default function LabelledImages({ files }: Props) {
                                                             <span className="sr-only">
                                                                 View details for{" "}
                                                                 {
-                                                                    file.labelled_image
+                                                                    file?.labelled_image
                                                                 }
                                                             </span>
                                                         </button>
@@ -243,15 +243,15 @@ export default function LabelledImages({ files }: Props) {
                             <div>
                                 <div className="aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg">
                                     <img
-                                        src={currentFile.labelled_image}
-                                        alt={currentFile.labelled_image}
+                                        src={currentFile?.labelled_image}
+                                        alt={currentFile?.labelled_image}
                                         className="object-cover h-80 w-72 "
                                     />
                                 </div>
                                 <div className="mt-4 flex items-start justify-between">
                                     <div>
                                         <Link
-                                            href={currentFile.labelled_image}
+                                            href={currentFile?.labelled_image}
                                             target="_blank"
                                             className="text-lg font-medium text-accent-foreground underline"
                                         >
@@ -263,7 +263,7 @@ export default function LabelledImages({ files }: Props) {
                                         className="relative ml-4 flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                     >
                                         <span className="absolute -inset-1.5" />
-                                        {currentFile.isSegmented ? (
+                                        {currentFile?.isSegmented ? (
                                             <CheckIcon
                                                 className="h-6 w-6"
                                                 aria-hidden="true"
@@ -292,7 +292,7 @@ export default function LabelledImages({ files }: Props) {
                                         </dt>
                                         <dd className="whitespace-nowrap text-gray-900">
                                             {formattedDate(
-                                                currentFile.uploaded_at
+                                                currentFile?.uploaded_at
                                             )}
                                         </dd>
                                     </div>
@@ -307,7 +307,7 @@ export default function LabelledImages({ files }: Props) {
                                 >
                                     <Link
                                         target="_blank"
-                                        href={currentFile.labelled_image}
+                                        href={currentFile?.labelled_image}
                                     >
                                         Download
                                     </Link>
