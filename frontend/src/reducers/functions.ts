@@ -1,9 +1,6 @@
 import axios, { AxiosError } from "axios"
 import { TypedDispatch } from "@/store/store"
-import {
-    setToken,
-    setUserInfo,
-} from "./slices/authReducers"
+import { setToken, setUserInfo } from "./slices/authReducers"
 import { UserType } from "./slices/authReducers"
 import { BASEURL } from "@/API/APIRoute"
 // Register a new user
@@ -79,8 +76,6 @@ export const fetchUserInfo = () => async (dispatch: TypedDispatch) => {
     }
 }
 
-
-
 export const logout = () => async (dispatch: TypedDispatch) => {
     try {
         dispatch(setToken(""))
@@ -90,6 +85,3 @@ export const logout = () => async (dispatch: TypedDispatch) => {
         await axios.post(url)
     } catch (error) {}
 }
-
-
-

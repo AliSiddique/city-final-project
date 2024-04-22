@@ -191,20 +191,19 @@ export default function LogTable({ logs }: { logs: Logs[] }) {
                                 </tr>
                             </thead>
                             {open && (
-                                            <LogView
-                                                id={log.id}
-                                                log={log.log}
-                                                created_at={log.created_at}
-                                                method={log.method}
-                                                url={log.url}
-                                                open={open}
-                                                setOpen={setOpen}
-                                            />
-                                        )}
+                                <LogView
+                                    id={log.id}
+                                    log={log.log}
+                                    created_at={log.created_at}
+                                    method={log.method}
+                                    url={log.url}
+                                    open={open}
+                                    setOpen={setOpen}
+                                />
+                            )}
                             <tbody className="divide-y divide-gray-200 bg-white">
                                 {logs.map((log: Logs) => (
                                     <tr key={log.id}>
-                                     
                                         <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-0">
                                             {log.id}
                                         </td>
@@ -228,7 +227,8 @@ export default function LogTable({ logs }: { logs: Logs[] }) {
                                             <button
                                                 onClick={() => {
                                                     setLog(log)
-                                                     setOpen(!open)}}
+                                                    setOpen(!open)
+                                                }}
                                                 className="text-indigo-600 hover:text-indigo-900"
                                             >
                                                 View

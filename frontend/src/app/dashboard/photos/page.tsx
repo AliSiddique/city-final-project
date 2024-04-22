@@ -10,11 +10,7 @@ async function page({}: Props) {
         cookies().get("token")?.value!,
         "api/users-photos"
     )
-    return (
-        <div>
-            {/* <Photos files={files} /> */}
-        </div>
-    )
+    return <div>{/* <Photos files={files} /> */}</div>
 }
 
 export default page

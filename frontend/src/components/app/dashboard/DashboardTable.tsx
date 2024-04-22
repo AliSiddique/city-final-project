@@ -37,7 +37,7 @@ export default function DashboardTable({ token, files }: Props) {
     const labelledFiles = files?.filter(
         (file: FileData) => file.isLabelled == true
     )
-  
+
     const [loading, setLoading] = React.useState(false)
     const router = useRouter()
 
@@ -129,11 +129,14 @@ export default function DashboardTable({ token, files }: Props) {
                                     Labelled
                                 </TabsTrigger>
                                 <TabsTrigger value="draft">Draft</TabsTrigger>
-                            
                             </TabsList>
                             <div className="ml-auto flex items-center gap-2">
                                 <Button
-                                disabled={loading || files.length === 0 || labelledFiles.length === files.length}
+                                    disabled={
+                                        loading ||
+                                        files.length === 0 ||
+                                        labelledFiles.length === files.length
+                                    }
                                     onClick={labelAll}
                                     size="sm"
                                     variant="outline"
@@ -201,7 +204,6 @@ export default function DashboardTable({ token, files }: Props) {
                         <TabsContent value="labelled">
                             <ImageTableRows files={labelledFiles} />
                         </TabsContent>
-                      
                     </Tabs>
                 </main>
             )}

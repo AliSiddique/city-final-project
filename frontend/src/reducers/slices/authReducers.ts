@@ -23,7 +23,7 @@ if (hasCookie("token")) {
 }
 
 const initialState = {
-    token: initToken as string | null, 
+    token: initToken as string | null,
     loggedIn: false as boolean | null,
     user: {
         pk: 0,
@@ -59,10 +59,7 @@ const authSlice = createSlice({
 })
 
 export default authSlice.reducer
-export const {
-    setToken,
-    setUserInfo, 
-} = authSlice.actions
+export const { setToken, setUserInfo } = authSlice.actions
 
 export const getUserInfo = (state: RootState) => state.auth.user
 export const getToken = (state: RootState) => state.auth.token

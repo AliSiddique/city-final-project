@@ -3,9 +3,7 @@ import { FormEvent, useState } from "react"
 import { RadioGroup } from "@headlessui/react"
 import { CircleUser, Loader } from "lucide-react"
 
-import {
-    CheckIcon,
-} from "@heroicons/react/20/solid"
+import { CheckIcon } from "@heroicons/react/20/solid"
 import { BASEURL } from "@/API/APIRoute"
 import axios from "axios"
 import { Button } from "./ui/button"
@@ -18,12 +16,11 @@ interface Model {
     name: string
     description: string
     url: string
-
 }
 interface Choices {
     models: Model[]
 }
-const choices:Choices = {
+const choices: Choices = {
     models: [
         {
             name: "Segmentation",
@@ -37,7 +34,6 @@ const choices:Choices = {
         },
     ],
 }
-
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ")
@@ -110,10 +106,13 @@ export default function SingleImage({ token, file }: Props) {
         e.preventDefault()
         try {
             setLoading(true)
-            const res = await axios.post(`${BASEURL}/api/${selectedModel.url}`, {
-                id: file.photo.id,
-                image: file.photo.image,
-            })
+            const res = await axios.post(
+                `${BASEURL}/api/${selectedModel.url}`,
+                {
+                    id: file.photo.id,
+                    image: file.photo.image,
+                }
+            )
             const data = res.data
             setLabelled_image(data.labelled_image)
             setLoading(false)
@@ -125,7 +124,6 @@ export default function SingleImage({ token, file }: Props) {
             setLoading(false)
         }
     }
-
 
     return (
         <div className="bg-gray-50">
@@ -267,8 +265,11 @@ export default function SingleImage({ token, file }: Props) {
                                             onClick={handleLabel}
                                             className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
                                         >
-                                            {loading ? <Loader className="mr-2 h-4 w-4 animate-spin" /> : "Label"}
-
+                                            {loading ? (
+                                                <Loader className="mr-2 h-4 w-4 animate-spin" />
+                                            ) : (
+                                                "Label"
+                                            )}
                                         </Button>
                                     </div>
                                 </form>
@@ -284,7 +285,7 @@ export default function SingleImage({ token, file }: Props) {
                                 id="details-heading"
                                 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
                             >
-                              Your labelled images.
+                                Your labelled images.
                             </h2>
                             <p className="mt-3 max-w-3xl text-lg text-gray-600">
                                 Have a look at your labelled images.
@@ -293,34 +294,41 @@ export default function SingleImage({ token, file }: Props) {
 
                         <div className="mt-16 grid grid-cols-1 gap-y-16 lg:grid-cols-2 lg:gap-x-8">
                             <div>
-                            <div className="aspect-h-2 aspect-w-3 w-full overflow-hidden rounded-lg h-80">
+                                <div className="aspect-h-2 aspect-w-3 w-full overflow-hidden rounded-lg h-80">
                                     <div className="overflow-hidden  aspect-video bg-red-400 cursor-pointer rounded-xl relative group">
                                         <div className="rounded-xl z-50 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out cursor-pointer absolute from-black/80 to-transparent bg-gradient-to-t inset-x-0 -bottom-2 pt-30 text-white flex items-end">
                                             <div>
                                                 <div className="  p-4 space-y-3 text-xl group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 pb-10 transform transition duration-300 ease-in-out">
                                                     <div className="font-bold">
-                                                       Segmented Image
+                                                        Segmented Image
                                                     </div>
 
                                                     <div className="opacity-60 text-sm ">
-                                                      This is the segmented image based on your input image.
+                                                        This is the segmented
+                                                        image based on your
+                                                        input image.
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <Link href={file.segmented_image ?? file?.photo.image} target="_blank">
-                                        <img
-                                            alt=""
-                                            className="object-cover w-full aspect-square group-hover:scale-110 transition duration-300 ease-in-out"
-                                            src={
-                                                file?.segmented_image ??
-                                                file?.photo?.image
+                                        <Link
+                                            href={
+                                                file.segmented_image ??
+                                                file?.photo.image
                                             }
-                                        />
+                                            target="_blank"
+                                        >
+                                            <img
+                                                alt=""
+                                                className="object-cover w-full aspect-square group-hover:scale-110 transition duration-300 ease-in-out"
+                                                src={
+                                                    file?.segmented_image ??
+                                                    file?.photo?.image
+                                                }
+                                            />
                                         </Link>
                                     </div>
                                 </div>
-                              
                             </div>
                             <div>
                                 <div className="aspect-h-2 aspect-w-3 w-full overflow-hidden rounded-lg h-80">
@@ -329,28 +337,35 @@ export default function SingleImage({ token, file }: Props) {
                                             <div>
                                                 <div className="  p-4 space-y-3 text-xl group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 pb-10 transform transition duration-300 ease-in-out">
                                                     <div className="font-bold">
-                                                       Labelled Image
+                                                        Labelled Image
                                                     </div>
 
                                                     <div className="opacity-60 text-sm ">
-                                                      This is the segmented image based on your input image.
+                                                        This is the segmented
+                                                        image based on your
+                                                        input image.
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <Link href={file?.labelled_image ?? file?.photo.image} target="_blank">
-                                        <img
-                                            alt=""
-                                            className="object-cover w-full aspect-square group-hover:scale-110 transition duration-300 ease-in-out"
-                                            src={
+                                        <Link
+                                            href={
                                                 file?.labelled_image ??
-                                                file?.photo?.image
+                                                file?.photo.image
                                             }
-                                        />
+                                            target="_blank"
+                                        >
+                                            <img
+                                                alt=""
+                                                className="object-cover w-full aspect-square group-hover:scale-110 transition duration-300 ease-in-out"
+                                                src={
+                                                    file?.labelled_image ??
+                                                    file?.photo?.image
+                                                }
+                                            />
                                         </Link>
                                     </div>
                                 </div>
-                             
                             </div>
                         </div>
                     </section>
@@ -389,10 +404,10 @@ export default function SingleImage({ token, file }: Props) {
                                                     </div>
                                                     <div className="mt-2 space-x-2 text-sm">
                                                         <span className="font-medium text-gray-500">
-                                                            {comment.created_at && formattedDate(
-                                                                comment?.created_at
-                                                            )}
-                                                           
+                                                            {comment.created_at &&
+                                                                formattedDate(
+                                                                    comment?.created_at
+                                                                )}
                                                         </span>{" "}
                                                     </div>
                                                 </div>
@@ -412,7 +427,8 @@ export default function SingleImage({ token, file }: Props) {
                                         onSubmit={(e) =>
                                             addComment(
                                                 e,
-                                                file.photo.id.toString())
+                                                file.photo.id.toString()
+                                            )
                                         }
                                     >
                                         <div>
@@ -440,10 +456,16 @@ export default function SingleImage({ token, file }: Props) {
                                         <div className="mt-3 flex items-center justify-between">
                                             <Button
                                                 type="submit"
-                                                disabled={loading || !newComment}
+                                                disabled={
+                                                    loading || !newComment
+                                                }
                                                 className="inline-flex items-center justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                                             >
-                                                {loading ? <Loader className="mr-2 h-4 w-4 animate-spin" /> : "Comment"}
+                                                {loading ? (
+                                                    <Loader className="mr-2 h-4 w-4 animate-spin" />
+                                                ) : (
+                                                    "Comment"
+                                                )}
                                             </Button>
                                         </div>
                                     </form>

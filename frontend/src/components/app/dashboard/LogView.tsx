@@ -1,6 +1,6 @@
 "use client"
 import { Fragment } from "react"
-import {  Transition } from "@headlessui/react"
+import { Transition } from "@headlessui/react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 import { Dialog } from "@headlessui/react"
 import { formattedDate } from "@/lib/utils"

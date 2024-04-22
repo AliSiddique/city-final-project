@@ -62,7 +62,7 @@ export default function SignupForm() {
                     toast,
                     router
                 )
-            ) 
+            )
             setLoading(false)
         } catch (error: any) {
             toast.error(error)

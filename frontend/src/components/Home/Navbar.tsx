@@ -66,7 +66,6 @@ export default function Navbar({}: Props) {
                             </div>
                             <nav className="flex-col flex-grow hidden py-12 md:py-0 md:flex md:items-end justify-center md:flex-row">
                                 <ul className="space-y-2 list-none md:space-y-0 text-xs text-white md:ml-auto items-center md:inline-flex justify-center text-center md:text-left gap-3">
-
                                     <li>
                                         <Link
                                             href={"/user/login"}

@@ -52,7 +52,6 @@ export default function Dashboard({ children }: Props) {
                 e.preventDefault()
                 router.push(`/dashboard/search?query=${search}`)
                 setSearch("")
-
             }
         }
 
@@ -237,12 +236,10 @@ export default function Dashboard({ children }: Props) {
                                     <DropdownMenuSeparator />
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem
-                                        onClick={() => 
-                                            {
-                                                dispatch(logout())
-                                                router.push("/user/login")
-                                            }                                        
-                                        }
+                                        onClick={() => {
+                                            dispatch(logout())
+                                            router.push("/user/login")
+                                        }}
                                     >
                                         Logout
                                     </DropdownMenuItem>

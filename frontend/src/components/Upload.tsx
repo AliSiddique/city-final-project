@@ -8,7 +8,6 @@ import Link from "next/link"
 import { Tabs, TabsContent, TabsList } from "./ui/tabs"
 import { TabsTrigger } from "./ui/tabs"
 
-
 export default function Upload({ token }: { token: string }) {
     const [image, setImage] = useState<any>(null)
     const [multiple, setMultiple] = useState<any>([])
@@ -26,7 +25,7 @@ export default function Upload({ token }: { token: string }) {
         formData.append("description", description)
 
         if (token) {
-            var requestOptions:any = {
+            var requestOptions: any = {
                 method: "POST",
                 body: formData,
                 redirect: "follow",
@@ -99,7 +98,6 @@ export default function Upload({ token }: { token: string }) {
                     console.log(result)
                 })
                 .catch((error) => toast.error("error", error))
-         
         } else {
             toast.error("Error uploading image", {
                 id: toastId,
@@ -187,7 +185,6 @@ export default function Upload({ token }: { token: string }) {
                                             Image
                                         </label>
                                         <div className="mt-2 flex items-center gap-x-3">
-
                                             <input
                                                 type="file"
                                                 onChange={(e) =>
@@ -212,7 +209,12 @@ export default function Upload({ token }: { token: string }) {
                                 <Link href="/dashboard">Cancel</Link>
                             </Button>
                             <Button
-                                disabled={loading || name === "" || !image || !description}
+                                disabled={
+                                    loading ||
+                                    name === "" ||
+                                    !image ||
+                                    !description
+                                }
                                 type="submit"
                                 className="rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
@@ -292,7 +294,6 @@ export default function Upload({ token }: { token: string }) {
                                             Image
                                         </label>
                                         <div className="mt-2 flex items-center gap-x-3">
-                                           
                                             <input
                                                 type="file"
                                                 multiple
@@ -314,7 +315,9 @@ export default function Upload({ token }: { token: string }) {
                                 <Link href="/dashboard">Cancel</Link>
                             </Button>
                             <Button
-                                disabled={loading || name === ""  || !description}
+                                disabled={
+                                    loading || name === "" || !description
+                                }
                                 type="submit"
                                 className="rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
