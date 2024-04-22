@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function EmptyState() {
     return (
-        <div className="flex flex-col items-center justify-center h-full px-8">
+        <div className="flex justify-center px-8">
       <Link
         href="/dashboard"
         className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
