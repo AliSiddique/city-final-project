@@ -49,6 +49,8 @@ export default function Dashboard({ children }: Props) {
             if (e.key === "Enter") {
                 e.preventDefault()
                 router.push(`/dashboard/search?query=${search}`)
+                setSearch("")
+
             }
         }
 
