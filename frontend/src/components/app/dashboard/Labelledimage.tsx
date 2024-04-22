@@ -12,6 +12,7 @@ import Link from "next/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { formattedDate } from "@/lib/utils"
 import { CheckIcon } from "lucide-react"
+import EmptyState from "@/components/ui/EmptyState"
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ")
@@ -50,6 +51,8 @@ export default function LabelledImages({ files = [] }: Props) {
     })
     return (
         <div className="flex h-full">
+                                        {files.length === 0 ? <EmptyState /> :(  
+
             <div className="flex flex-1 flex-col overflow-hidden">
                 <div className="flex flex-1 items-stretch overflow-hidden">
                     <Tabs defaultValue="recentlylabelled">
@@ -87,7 +90,7 @@ export default function LabelledImages({ files = [] }: Props) {
                                     </div>
                                 </div>
 
-                                {/* Tabs */}
+                            
                                 <div className="mt-3 sm:mt-2">
                                     <div className="sm:hidden">
                                         <label
@@ -124,7 +127,6 @@ export default function LabelledImages({ files = [] }: Props) {
                                         </div>
                                     </div>
                                 </div>
-
                                 <TabsContent value="recentlylabelled">
                                     <section
                                         className="mt-8 pb-16"
@@ -317,6 +319,7 @@ export default function LabelledImages({ files = [] }: Props) {
                     </aside>
                 </div>
             </div>
+                                        )}
         </div>
     )
 }
