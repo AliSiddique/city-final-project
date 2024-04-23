@@ -154,9 +154,9 @@ def label_image(request):
 
 
         saved_image.save()
-        subject, from_email, to = "hello", "alisiddique10@hotmail.com", user.email
+        subject, from_email, to = "Your images have been labelled!", "alisiddique10@hotmail.com", user.email
         text_content = "Your image has been labelled."
-        html_content = f"<div> <img src={saved_image.labelled_image.url} /> is an <strong>important</strong> message.</div>"
+        html_content = f"<div> <img src={saved_image.labelled_image.url} /> is an </div>"
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
         msg.attach_alternative(html_content, "text/html")
         msg.send()

@@ -70,7 +70,7 @@ This will take you through the steps needed to run the project.
 ## Python runtime
 1. Clone the Backend repository:
     ```
-    git clone https://github.com/AliSiddique/city-final-project/frontend
+    git clone https://github.com/AliSiddique/city-final-project/backend
     ```
   ### or download the code.
 2. Open the project on Vscode
@@ -119,15 +119,18 @@ This will take you through the steps needed to run the project.
 ### Docker runtime (Easier)
 1. Clone the Backend repository:
     ```
-    git clone https://github.com/AliSiddique/city-final-project/frontend
+    git clone https://github.com/AliSiddique/city-final-project/backend
     ```
   ###  or download the code.
-
 2. Run 
+    ```
+    cd backend
+    ```
+3. Run 
     ```
     docker build -t backend_image .
     ```
-3. Run 
+4. Run 
     ```
     docker run -p 127.0.0.1:8000:8000 backend_image
     ```
